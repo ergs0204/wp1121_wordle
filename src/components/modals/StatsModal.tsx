@@ -102,8 +102,8 @@ export const StatsModal = ({
             )}
             {ENABLE_ARCHIVED_GAMES && !isLatestGame && (
               <div className="mt-2 inline-flex">
-                <ClockIcon className="mr-1 mt-2 mt-1 h-5 w-5 stroke-black dark:stroke-white" />
-                <div className="mt-1 ml-1 text-center text-sm sm:text-base">
+                <ClockIcon className="mr-1 mt-1 mt-2 h-5 w-5 stroke-black dark:stroke-white" />
+                <div className="ml-1 mt-1 text-center text-sm sm:text-base">
                   <strong>{ARCHIVE_GAMEDATE_TEXT}:</strong>
                   <br />
                   {format(solutionGameDate, 'd MMMM yyyy', {
@@ -138,7 +138,7 @@ export const StatsModal = ({
       )}
       {ENABLE_MIGRATE_STATS && (
         <div>
-          <hr className="mt-4 -mb-4 border-gray-500" />
+          <hr className="-mb-4 mt-4 border-gray-500" />
           <MigrationIntro handleMigrateStatsButton={handleMigrateStatsButton} />
         </div>
       )}
