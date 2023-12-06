@@ -34,7 +34,6 @@ export default CredentialsProvider({
         id: usersTable.displayId,
         username: usersTable.username,
         email: usersTable.email,
-        provider: usersTable.provider,
         hashedPassword: usersTable.hashedPassword,
       })
       .from(usersTable)
@@ -53,7 +52,6 @@ export default CredentialsProvider({
           username,
           email: email.toLowerCase(),
           hashedPassword,
-          provider: "credentials",
         })
         .returning();
       return {
@@ -64,15 +62,6 @@ export default CredentialsProvider({
     }
 
     // Sign in
-    if (existedUser.provider !== "credentials") {
-      console.log(`The email has registered with ${existedUser.provider}.`);
-      return null;
-    }
-    if (!existedUser.hashedPassword) {
-      console.log("The email has registered with social account.");
-      return null;
-    }
-
     const isValid = await bcrypt.compare(password, existedUser.hashedPassword);
     if (!isValid) {
       console.log("Wrong password. Try again.");
