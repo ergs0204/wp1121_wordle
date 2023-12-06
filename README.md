@@ -1,243 +1,306 @@
-# React Wordle
+# Run the project
 
-This is a clone project of the popular word guessing game we all know and love. Made using React, Typescript, and Tailwind.
+1. Install dependencies
+   ```bash
+   yarn
+   ```
+2. Get Pusher credentials
+   Please refer to the [Pusher Setup](#pusher-setup) section for more details.
 
-[**Try out the demo!**](https://reactle.vercel.app/)
+3. Get Github OAuth credentials
+   Please refer to the [NextAuth Setup](#nextauth-setup) section for more details.
 
-## Build and run
+4. Create `.env.local` file in the project root and add the following content:
 
-### To Run Locally:
+   ```text
+   PUSHER_ID=
+   NEXT_PUBLIC_PUSHER_KEY=
+   PUSHER_SECRET=
+   NEXT_PUBLIC_PUSHER_CLUSTER=
 
-Clone the repository and perform the following command line actions:
+   AUTH_SECRET=<this can be any random string>
+   AUTH_GITHUB_ID=
+   AUTH_GITHUB_SECRET=
+   ```
 
-```bash
-$> cd react-wordle
-$> npm install
-$> npm run start
-```
+5. Start the database
+   ```bash
+   docker compose up -d
+   ```
+6. Run migrations
+   ```bash
+   yarn migrate
+   ```
+7. Start the development server
+   ```bash
+   yarn dev
+   ```
+8. Open http://localhost:3000 in your browser
 
-### To build/run docker container:
+# Setup Guide
 
-#### Development
+## Prettier and ESLint
 
-```bash
-$> docker compose up
-```
+1. Install prettier and prettier plugins
+   ```bash
+   yarn add -D prettier prettier-plugin-tailwindcss @trivago/prettier-plugin-sort-imports
+   ```
+2. Install eslint and eslint plugins
+   ```bash
+   yarn add -D eslint typescript @typescript-eslint/parser eslint-config-prettier @typescript-eslint/eslint-plugin
+   ```
+3. Copy and paste the `./prettierrc.cjs` and `./eslintrc.json` from this repo to your project root.
 
-or
+4. Add `format` script to `package.json`
+   ```json
+   {
+     "scripts": {
+       "format": "prettier --write ."
+     }
+   }
+   ```
+5. Check if the scripts work
+   ```bash
+   yarn format
+   yarn lint
+   ```
 
-```bash
-$> docker build -t reactle:dev -f docker/Dockerfile .
-$> docker run -d -p 3000:3000 --name reactle-dev reactle:dev
-```
+## Drizzle Setup
 
-Open [http://localhost:3000](http://localhost:3000) in browser. Please follow [this tutorial](https://shipyard.build/blog/react-wordle-with-docker-compose/) for a complete discussion on building a Docker image for Reactle.
+1. Install drizzle
 
-#### Production
+   ```bash
+   yarn add drizzle-orm pg
+   yarn add -D drizzle-kit @types/pg
+   ```
 
-```bash
-$> docker build --target=prod -t reactle:prod -f docker/Dockerfile .
-$> docker run -d -p 80:8080  --name reactle-prod reactle:prod
-```
+2. Copy the `docker-compose.yml` from this repo to your project root.
 
-Open [http://localhost](http://localhost) in browser. See the [entry in the FAQ](#why-does-sharing-of-results-not-work) below about requirements for sharing of results.
+3. Start the database
 
-## FAQ
+   ```bash
+   docker compose up -d
+   ```
 
-### How can I change the length of a guess?
+4. Add `POSTGRES_URL` to `.env.local`:
+   ```text
+   ...
+   POSTGRES_URL=postgres://postgres:postgres@localhost:5432/notion-clone
+   ```
+5. Create `db` folder
+   ```bash
+   cd ./src
+   mkdir db
+   ```
+6. Create the `./src/db/index.ts` file:
 
-The default configuration is for solutions and guesses of length five, but it is flexible enough to handle other lengths, even variable lengths each day.
+   ```ts
+   import { drizzle } from "drizzle-orm/node-postgres";
+   import { Client } from "pg";
 
-To configure for a different constant length:
+   import { privateEnv } from "@/lib/env/private";
 
-- Update the `WORDS` array in [src/constants/wordlist.ts](src/constants/wordlist.ts) to include only words of the new length.
-- Update the `VALID_GUESSES` array in [src/constants/validGuesses.ts](src/constants/validGuesses.ts) to include only words of the new length.
+   const client = new Client({
+     connectionString: privateEnv.POSTGRES_URL,
+     connectionTimeoutMillis: 5000,
+   });
+   await client.connect();
+   export const db = drizzle(client);
+   ```
 
-To configure for variable lengths:
+   Remember to setup the environment variables handlers in `src/lib/env/private.ts`:
 
-- Update the `WORDS` array in [src/constants/wordlist.ts](src/constants/wordlist.ts) to include words of any of the variable lengths desired.
-- Update the `VALID_GUESSES` array in [src/constants/validGuesses.ts](src/constants/validGuesses.ts) to include words of any of the variable lengths desired.
+   ```ts
+   import { z } from "zod";
 
-Note that guesses are validated against both the length of the solution, and presence in VALID_GUESSES.
+   const privateEnvSchema = z.object({
+     POSTGRES_URL: z.string().url(),
+   });
 
-### How can I create a version in another language?
+   type PrivateEnv = z.infer<typeof privateEnvSchema>;
 
-- In [.env](.env):
-  - Update the title and the description
-  - Set the `REACT_APP_LOCALE_STRING` to your locale
-- In [public/index.html](public/index.html):
-  - Update the "You need to enable JavaScript" message
-  - Update the language attribute in the HTML tag
-  - If the language is written right-to-left, add `dir="rtl"` to the HTML tag
-- Update the name and short name in [public/manifest.json](public/manifest.json)
-- Update the strings in [src/constants/strings.ts](src/constants/strings.ts)
-- Add all of the five letter words in the language to [src/constants/validGuesses.ts](src/constants/validGuesses.ts), replacing the English words
-- Add a list of goal words in the language to [src/constants/wordlist.ts](src/constants/wordlist.ts), replacing the English words
-- Update the "Settings" modal in [src/components/modals/SettingsModal.tsx](src/components/modals/SettingsModal.tsx)
-- Update the "Info" modal in [src/components/modals/InfoModal.tsx](src/components/modals/InfoModal.tsx)
-- Update the "DatePicker" modal in [src/components/modals/DatePickerModal.tsx](src/components/modals/DatePickerModal.tsx)
-- Update the statistics migration components modal in:
-  - [src/components/stats/MigrationIntro.tsx](src/components/stats/MigrationIntro.tsx)
-  - [src/components/stats/EmigratePanel.tsx](src/components/stats/EmigratePanel.tsx)
-  - [src/components/stats/ImmigratePanel.tsx](src/components/stats/ImmigratePanel.tsx)
-  - [src/components/modals/MigrateStatsModal.tsx](src/components/modals/MigrateStatsModal.tsx)
-- To ensure that migration codes are unique to your application, update the Blowfish encryption key and initialization vector with random 30 character and 8 character strings in [src/constants/settings.ts](src/constants/settings.ts)
-- If the language has letters that are not present in English update the keyboard in [src/components/keyboard/Keyboard.tsx](src/components/keyboard/Keyboard.tsx)
-- If the language is written right-to-left, prepend `\u202E` (the unicode right-to-left override character) to the return statement of the inner function in `generateEmojiGrid` in
-  [src/lib/share.ts](src/lib/share.ts)
-- To enable replaying past days' games, set `ENABLE_ARCHIVED_GAMES` to `true`
-- Set `DATE_LOCALE` to a suitable locale string as defined in [date-fns](https://github.com/date-fns/date-fns/tree/main/src/locale).
+   export const privateEnv: PrivateEnv = {
+     POSTGRES_URL: process.env.POSTGRES_URL!,
+   };
 
-### How can I add usage tracking?
+   privateEnvSchema.parse(privateEnv);
+   ```
 
-This repository includes support for Google Analytics or [Plausible Analytics](https://plausible.io), but, by default, this is disabled.
+7. Create an empty `./src/db/schema.ts` file
 
-To enable Google Analytics:
+8. Copy the `./drizzle.config.ts` from this repo to your project root.
+   Remember to install `dotenv`:
 
-- Create a Google Analytics 4 property and obtain the measurement ID (of the format `G-XXXXXXXXXX`)
-- In [.env](.env), add `REACT_APP_GOOGLE_MEASUREMENT_ID=G-XXXXXXXXXX`
+   ```bash
+   yarn add dotenv
+   ```
 
-Keep in mind that your region might have legislation about obtaining a user's consent before enabling trackers. This is up to downstream repos to implement.
+9. Change the `target` option in `tsconfig.json` to `es2017`:
 
-To enable Plausible Analytics:
+   ```json
+   {
+     "compilerOptions": {
+       "target": "es2017",
+       ...
+     }
+   }
+   ```
 
-- Create a new website with Plausible Analytics with a given domain, e.g. `example.app`
-- In [.env](.env), add `REACT_APP_PLAUSIBLE_DOMAIN=example.app`
+10. Add scripts
+    Add the following scripts to the `./package.json` file:
 
-### Why does sharing of results not work?
+    ```json
+    {
+      "scripts": {
+        // This script will update the database schema
+        "migrate": "drizzle-kit push:pg",
+        // This script opens a GUI to manage the database
+        "studio": "drizzle-kit studio"
+      }
+    }
+    ```
 
-For mobile and wearable devices and smart TVs, sharing of results is initially attempted using the [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API). For other devices or when sharing to the Web Share API fails, the results are written to the clipboard. Both these methods will succeed only in a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts), which require you to implement the HTTPS protocol when hosting this repo on a public domain.
+    Remember to run `yarn migrate` after you make changes to the database schema, namely the `./src/db/schema.ts` file.
 
-## Projects built using this repo
+11. Add `pg-data` to `.gitignore`
+    ```text
+    ...
+    pg-data/
+    ```
 
-### Other languages
+## Shadcn UI setup
 
-- [Arwordle](https://arwordle.netlify.app/): Arabic
-- [BerSüz](https://wordletatar.vercel.app/): Tatar
-- [Boludle](https://www.boludle.com/): Argentinian
-- [Gerdle](https://gerdle.vext.co.uk/): Cornish (Kernowek)
-- [Ijambo](https://www.ijambo.app/): Kirundi (spoken in Burundi)
-- [Jwordle](https://jwordle.vercel.app/): Japanese
-- [Katadel](https://katadel.vercel.app/): Jawi (Malay Arabic script)
-- [Keclap](https://keclap.xyz/): Sundanese
-- [Kelmaly](https://kelmaly.com/): Arabic
-- [Kerdle](https://kerdle.vercel.app/): Cornish/Kernewek (Standard Written Form)
-- [Labzle](https://labzle.netlify.app): Balochi
-- [Latindictionary.io](https://wordle.latindictionary.io/): Latin
-- [Lexoula](https://lexoula.com/): Ελληνικά (Greek)
-- [Malay](https://malay-wordle.netlify.app/): Bahasa Malaysia
-- [Mondle](https://mondle.vercel.app/): Mongolian
-- [Parig](https://www.parig.xyz/): Western Armenian
-- [Parolette](https://parolette.netlify.app/): Italian
-- [Parolle.it](https://parolle.it): Italian
-- [Pashtoodle](https://pashtoodle.lingdocs.com): Pashto
-- [Persian](https://www.persian-wordle.ir/): Persian (Farsi)
-- [Pinoledle](https://pinoledle.vercel.app/): Nicaraguan
-- [Pinyin](https://www.pinyindle.com/): Pinyin (romanization system for Mandarin Chinese)
-- [Rudle](https://rudle.vercel.app): Russian
-- [Sindhal](https://hellosindh.com/sindhal): Sindhi
-- [Szózat](https://szozat.miklosdanka.com/): Hungarian
-- [So'zzana](https://sozzana.netlify.app/): O'zbek (Lotin)
-- [Tatar](https://tatardle.vercel.app/): Tatar (Turkic Language)
-- [Tàu Tâi-gí (Taigi Wordle)](https://tau.taigi.info/): Taigi (Taiwanese)
-- [Tlembung](https://tlembung.vercel.app/): Javanese
-- [Tugma](https://tugma.vercel.app): Hiligaynon (spoken in the Philippines)
-- [Ukrainian](https://goroh.pp.ua/games/wordle): Ukrainian
-- [Urdle](https://urdle.chaoticity.com/): Urdu
-- [Vārdulis](https://wordle.lielakeda.lv/): Latvian
-- [Wokle](https://wokle.njamed.com/): Bininj Kunwok
-- [Word-leh!](https://word-leh.com): Singlish
-- [Wordle (BOS)](https://elahmo.github.io/wordle/): Bosnian
-- [Wordle (Spanish)](https://wordle-es.xavier.cc): Spanish/Espanol
-- [Wordle-RO](https://wordle-ro.sirb.net/): Romanian
-- [Wortel](https://wortel.wrintiewaar.co.za): Afrikaans
-- [Wörtchen](https://woertchen.sofacoach.de): German
-- [SGWordle](https://sgwordle.now.sh/): Swiss German
-- [kelma.mt](https://kelma.mt): Maltese
-- [Žodelė](https://zodele.lt): Lithuanian
-- [Слівце](https://slivce.com/): Ukrainian
-- [ਪੰਜਾਬੀ](https://punjabipuzzle.netlify.app/): Punjabi
-- [字知之明](https://zedaizd.github.io/zh-char-puzzle/): Traditional Chinese
-- [꼬들 - 한국어](https://belorin.github.io/): Korean
-- [한글 풀어쓰기 5자](https://nakosung.github.io/wordle/): Korean
-- [ไทย](https://buddhistuniversity.net/wordle-thai/): Thai
-- [சொல்லாடல்](https://omtamil.com/soladle/): Tamil
+1. Setup Shadcn UI
+   ```bash
+   npx shadcn-ui@latest init
+   ```
+2. Answer the questions carefully since **some of the default options are not compatible with our setup**.
 
-### Fun themes
+   - Would you like to use TypeScript (recommended)? `yes`
+   - Which style would you like to use? › `New York`
+     - I personally prefer New York style, but you can choose any style you like.
+   - Which color would you like to use as base color? › `Slate`
+     - You can choose any color you like.
+   - Where is your global CSS file? › › `src/app/globals.css`
+     - **IMPORTANT**: You must enter `src/app/globals.css` here. Otherwise, the setup will fail.
+   - Do you want to use CSS variables for colors? › `yes`
+   - Where is your tailwind.config.js located? › `tailwind.config.ts`
+     - **IMPORTANT**: We are using TypeScript, so you must enter `tailwind.config.ts` here.
+   - Configure the import alias for components: › `@/components`
+   - Configure the import alias for utils: › `@/lib/utils/shadcn`
+   - Are you using React Server Components? › `yes`
 
-- [Airportle](https://airportle.scottscheapflights.com/): Airport Codes
-- [Alterdle](https://alterdle.bonefiend.com/): Fully customisable, users can change the number of words to guess and the word length
-- [Anidal](https://anidal-abrarhayat.web.app/): Animals
-- [Birdle - Emojis](https://birdle.dev): Bird emojis
-- [Birdle](https://www.creek-birdle.com/): Birds
-- [Bluedle](https://bluedle.games/): Bluey based Wordle
-- [Buildly](https://buildly.procurepro.co/): Construction themed
-- [Canuckle](https://canuckle.net/): Canadian themed Wordle
-- [Crosswordle](https://crosswordle.mekoppe.com/): Crossword mashup
-- [DALL-e-dle](https://dall-e-dle.vercel.app/): Provides a DALL-E generated image of the word as a clue
-- [Discwordle](https://discwordle.marcschulder.de/): Terry Pratchett's Discworld
-- [Dundle](https://dundle.dunmiffcord.com/): The Office
-- [FFXIVrdle](https://ffxivrdle.com/): Final Fantasy XIV
-- [Harderdl](https://helq.github.io/harderdl): For those who find Wordle too easy (might need pen and paper to solve)
-- [Harry Potter](https://www.harrypotterwordle.com/): Harry Potter
-- [JoJodle](https://jojo-news.com/fun/jojodle/): JoJo’s Bizarre Adventure
-- [Mahjong Handle](https://mahjong-handle.update.sh/): Mahjong Hands
-- [Filmle](https://filmle.now.sh/): Movie titles
-- [Fletcherdle](https://www.fletcherdle.com/): American singer-songwriter FLETCHER
-- [Foodle](https://foodle.io/): Food themed Wordle
-- [Lyricle](https://www.lyricle.app/): Lyrics
-- [Midnightle](https://midnightle.flra.eu): Taylor Swift's Midnights album
-- [Movie Wordle](https://movie-wordle.vercel.app): Bollywood
-- [Murdle](https://murdle.vercel.app/): Spooky hangman mashup
-- [Octordle Unlimited](https://dailypuzzles.com/games/octordle-unlimited): Octordle Unlimited
-- [Pawnle](https://pawnle.vercel.app/): Parks and Recreation
-- [Poker Handle](https://kikychow.github.io/poker-wordle/): Poker
-- [Poker Handle 2](https://poker-handle2.vercel.app/): Poker
-- [Polygonle](https://www.polygonle.com/): Wordle with a shape-based clue for each character
-- [Quettale](https://quettale.vercel.app/): Quenya, Elven language in LOTR
-- [Radiole](https://radiole.vercel.app/): Radio-themed (for World Radio Day)
-- [RareWordle](https://rwordle.vercel.app/): Word guessing with multiple simultaneous solutions of varying "values", all created from the same letters. The goal is to find the most obscure solution. It is inspired by the TV game show Pointless.
-- [Reverdle](https://reverdle.now.sh/): Wordle but in reverse, that is one has to make as many guesses possible which do not have any green letter (i.e. a letter in the correct location compared to the hidden solution).
-- [Spotle](https://spotlegame.co.uk): Wordle with an extra block, the incognito block
-- [Squirdle](https://squirdle-inky.vercel.app/): Pokeman
-- [Tacticle](https://tacticle.co/): Chess puzzles
-- [Taylordle](https://www.taylordle.org/): Taylor Swift
-- [Trekle](https://treklegame.com): Star Trek
-- [Turdle](https://turdle.xyz): Make the turtle jump!
-- [Weedel](https://meetmeinouter.space/wordle/): Video game characters
-- [Wordle.cl](https://www.wordle.cl): Chilean modisms, cities, places
-- [Wordle Unlimited](https://wordleunlimited.co/): Wordle Unlimited
-- [Wrdl](https://wrdl-abae.vercel.app/): Words that are 5 letters long after getting rid of their vowels
-- [WROUD](https://www.wroud.net/): W R O U D is a simple word game that challenges people to find a six-letter word in 3 guesses from a cloud of letters.
-- [香港麻雀 糊 dle](https://hkwudle.vercel.app/): Mahjong hands under Hong Kong rules
+## Pusher Setup
 
-### Fun themes in other languages
+1.  Install pusher
 
-- [German Harry Potter Wordle](https://hpwordle.de)
-- [Spotle](https://spotlegame.co.uk/portuguese): Spotle, but in Portuguese
+    ```bash
+    yarn add pusher pusher-js
+    ```
 
-### Math, Acronyms, Science, Tech, and more
+2.  Create a pusher account at https://pusher.com/
+3.  Create a new app
 
-- [AI-powered](https://github.com/asirota/wordle-ai): Includes an AI component
-- [Cloudle](https://github.com/sstenchever/cloudle): Cloud technology
-- [Colordle](https://github.com/necropolina/colordle): Guess the hexadecimal color code of the background
-- [Genele](https://andrewholding.github.io/gene-wordle/): Gene symbols
-- [Jazle](https://jazle.quest/): Javascript
-- [Mathler](https://www.mathler.com/): Find the solution that equals X
-- [Morsel](https://plingbang.github.io/morsel/): Morse
-- [Numble](https://rbrignall.github.io/numble/): Maths
-- [Opsle](https://opsle.vercel.app/): Ops
-- [Passwordle](https://passwordle.sp8c3.com/): Passwords
-- [Perfdle](https://perfdle.com): Performance Testers and Engineers, DevOps, and Observability
-- [Primel](https://converged.yt/primel/): Prime numbers
-- [Qwordle](https://qwordle.bhat.ca/): Quantum version of Wordle (uses entangled word-pairs)
-- [Quantle](https://deduckproject.github.io/quantle/): Another quantum variant where guesses are quantum equations
-- [Rundle](https://furstenheim.github.io/react-wordle/): Like wordle, but only last three guesses are considered.
-- [Stockle](https://stockle.win/): Guess the stock or ETF
-- [Syscordle](https://nezza.github.io/syscordle/): SYSCALL
-- [UNLOCOdle](https://unlocodle.collabital.com/): UNLOCODEs
-- [Visionle](https://orisenbazuru.github.io/visionle/): Guess the label of randomly chosen image from ImageNet/ImageNet-Sketch dataset (Machine learning)
-- [Zip-zap-bam!](https://aneets.github.io/zip-zap-bam/): Word ladder game.
-- [0xdle](https://0xdle.vercel.app/): Hexadecimal
+    - Click `Get Started` or `Manage/Create app`on the `Channel` tab
+    - Enter the app name
+    - Select a cluster. Pick the one closest to you, i.e. `ap3(Asia Pacific (Tokyo))`
+    - Click `Create app`
 
-_Want to add one to the list? Please make a pull request._
+4.  Go to `App Keys` tab, you will see the following keys:
+    - `app_id`
+    - `key`
+    - `secret`
+    - `cluster`
+5.  Copy these keys to your `.env.local` file:
+
+    ```text
+    PUSHER_ID=<app_id>
+    NEXT_PUBLIC_PUSHER_KEY=<key>
+    PUSHER_SECRET=<secret>
+    NEXT_PUBLIC_PUSHER_CLUSTER=<cluster>
+    ```
+
+    `NEXT_PUBLIC` prefix is required for the client side to access the env variable.
+
+    Also, please remember to add these keys to your environment variables handler in `src/lib/env/private.ts` and `src/lib/env/public.ts`. You can view those two files for more details.
+
+6.  Go to `App Settings` tab, scroll down to `Enable authorized connections` and enable it.
+    Note: If you enable the `Enable client events` option, every connection will last only 30 seconds if not authorized. So if you just want to do some experiments, you might need to disable this option.
+
+## NextAuth Setup
+
+We use the latest version (v5) of NextAuth, which is still in beta. So there are some differences between the documentation and the actual code. You can find the detailed v5 migration guide here: https://authjs.dev/guides/upgrade-to-v5#authenticating-server-side
+
+1. Install next-auth
+
+   ```bash
+   yarn add next-auth@beta
+   ```
+
+2. Get Github OAuth credentials
+
+   - Go to `Settings` tab of your Github account
+   - Click `Developer settings` on the left sidebar
+   - Click `OAuth Apps` on the left sidebar
+   - Click `New OAuth App` or `Registr a new application`
+   - Enter the following information:
+     - `Application name`: `Notion Clone` (or any name you like)
+     - `Homepage URL`: `http://localhost:3000`
+     - `Authorization callback URL`: `http://localhost:3000/api/auth/callback/github`
+   - Click `Register application`
+   - Copy the `Client ID` and `Client Secret` to your `.env.local` file:
+
+     ```text
+     AUTH_GITHUB_ID=<Client ID>
+     AUTH_GITHUB_SECRET=<Client Secret>
+     ```
+
+     Before copying the Clinet Secret, you may need to click on `Generate a new client secret` first.
+
+     Note that in NextAuth v5, the prefix `AUTH_` is required for the env variables.
+
+     Note that you do not have to add those keys to `src/lib/env/private.ts` since they are automatically handled by NextAuth.
+
+3. Add `AUTH_SECRET` to `.env.local`:
+
+   ```text
+   AUTH_SECRET=any-random-string
+   ```
+
+   This is used to encrypt the session token. You can use any random string here. Make sure to keep it secret and update it regularly.
+
+   Note that you do not have to add those keys to `src/lib/env/private.ts` since they are automatically handled by NextAuth.
+
+4. Create `./src/lib/auth.ts`
+
+   ```ts
+   import NextAuth from "next-auth";
+   import GitHub from "next-auth/providers/github";
+
+   export const {
+     handlers: { GET, POST },
+     auth,
+   } = NextAuth({
+     providers: [GitHub],
+   });
+   ```
+
+5. Add `./src/app/api/auth/[...nextauth]/route.ts`
+
+   ```ts
+   export { GET, POST } from "@/lib/auth";
+   ```
+
+6. Add providers to `./src/app/layout.ts`
+   ```tsx
+   import { SessionProvider } from "next-auth/react";
+   ...
+      return (
+         <html lang="en">
+            <body className={inter.className}>
+               <SessionProvider>{children}</SessionProvider>
+            </body>
+         </html>
+      );
+   ...
+   ```
