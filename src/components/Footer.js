@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="container">
                 <div className="credits">
                     <p>
-                        Developed by <a href="/">Wordle team</a>
+                        Developed by <a href="/">WP-Wordle team</a>
                     </p>
                     <a
                         href="https://github.com/ergs0204/wp1121_wordle"

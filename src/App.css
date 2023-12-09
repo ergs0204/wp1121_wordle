@@ -26,6 +26,54 @@ body {
     color: #2b2b2b;
 }
 
+.back,
+.back:focus {
+    position: relative;
+    z-index: 1;
+    min-width: 200px;
+    border: 2px solid #575757;
+    border-radius: 0;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(0, 0, 0, 0.2);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.back:after {
+    content: "";
+    position: absolute;
+    height: 0%;
+    left: 50%;
+    top: 50%;
+    width: 150%;
+    z-index: -1;
+    background: #575757;
+    -moz-transform: translateX(-50%) translateY(-50%) rotate(-25deg);
+    -ms-transform: translateX(-50%) translateY(-50%) rotate(-25deg);
+    -webkit-transform: translateX(-50%) translateY(-50%) rotate(-25deg);
+    transform: translateX(-50%) translateY(-50%) rotate(-25deg);
+    -webkit-transition: all 0.75s ease 0s;
+    -moz-transition: all 0.75s ease 0s;
+    -o-transition: all 0.75s ease 0s;
+    transition: all 0.75s ease 0s;
+}
+.back:hover {
+    color: #FFFFFF;
+    text-shadow: none;
+}
+.back:hover:after {
+    height: 450%;
+}
+
 h1 {
     font-weight: 700;
     padding: 10px;
@@ -118,26 +166,66 @@ h1 {
     margin-bottom: 20px;
 }
 
-.homepage p {
-    font-size: 20px;
-    font-weight: 400;
+.homepage .mode,
+.homepage .mode:focus {
+    display: block;
+    position: relative;
+    z-index: 1;
+    min-width: 200px;
+    color: #535353;
+    font-size: 1rem;
+    font-weight: bold;
     text-align: center;
-    margin-bottom: 20px;
-}
-
-.homepage button {
-    padding: 10px 20px;
-    background: #ff9800;
-    border: none;
-    border-radius: 7px;
-    font-size: 20px;
+    text-decoration: none;
     text-transform: uppercase;
-    color: white;
-    font-weight: 800;
-    margin-top: 30px;
+    transition: all 500ms cubic-bezier(0.77, 0, 0.175, 1);
+    padding: 10px 20px;
+    margin: 10px 0px;
     cursor: pointer;
 }
+.homepage .mode:before,
+.homepage .mode:after {
+    content: '';
+    position: absolute;
+    transition: inherit;
+    z-index: -1;
+}
+.homepage .mode:hover {
+    color: #c0bfbf;
+    transition-delay: .5s;
+}
+.homepage .mode:hover:before {
+    transition-delay: 0s;
+}
+.homepage .mode:hover:after {
+    background: #1b1b1b;
+    transition-delay: .35s;
+}
 
+.homepage .mode.from-center:before {
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 0;
+    border: 1px solid #d1d1d1;
+    border-left: 0;
+    border-right: 0;
+}
+.homepage .mode.from-center:after {
+    bottom: 0;
+    left: 0;
+    height: 0;
+    width: 100%;
+    background: #383838;
+}
+.homepage .mode.from-center:hover:before {
+    left: 0;
+    width: 100%;
+}
+.homepage .mode.from-center:hover:after {
+    top: 0;
+    height: 100%;
+}
 
 /* keypad */
 .keypad {
@@ -242,7 +330,7 @@ h1 {
     height: fit-content;
 }
 
-.modal button.anchor {
+.modal #back.anchor {
     border: none;
     background: none;
     font-size: 12px;
@@ -253,7 +341,7 @@ h1 {
     margin: 0 auto;
 }
 
-.modal button.reset {
+.modal #back.reset {
     padding: 10px 20px;
     background: #ff9800;
     border: none;
@@ -328,7 +416,7 @@ h1 {
     align-items: center;
 }
 
-.error button {
+.error #back {
     border: none;
     padding: 10px 15px;
     background: #ff64643d;
@@ -513,7 +601,7 @@ footer .credits a {
         color: rgba(106, 106, 106, 0.867);
     }
 
-    .modal button.reset {
+    .modal #back.reset {
         margin-top: 10px;
         font-size: 18px;
         padding: 8px 14px;

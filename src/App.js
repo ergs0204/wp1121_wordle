@@ -3,13 +3,12 @@ import Wordle from "./components/Wordle";
 import "./App.css";
 // import words from "./data/wordDb";
 import dictionary from "./data/dictionary";
-import Footer from "./components/Footer";
 import Homepage from "./components/Homepage";
 
 function App() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
-    const [homepage, setHomepage] = useState(false);
+    const [homepage, setHomepage] = useState(true);
 
     useEffect(() => {
         const dictWords = Object.keys(dictionary).filter(
@@ -23,17 +22,16 @@ function App() {
         console.log("solution", solution);
     }, []);
 
-    return (    
+    return (
         <div className="App">
             {homepage 
             ? 
             <Homepage homepage={homepage} setHomepage={setHomepage}/>
             : 
             <div>
-                <button className="flex" onClick={() => {setHomepage(true)}}>Home</button>
+                <button className="back" onClick={() => {setHomepage(true)}}>Home</button>
                 <h1>Wordle</h1>
                 <Wordle solution={solution} words={words} />
-                <Footer />
             </div>
             }
         </div>

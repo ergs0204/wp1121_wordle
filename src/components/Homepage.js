@@ -1,6 +1,9 @@
 import React from "react";
+import Footer from "./Footer";
+import {useState} from "react";
 
-export default function Homepage (homepage, setHomepage){
+export default function Homepage ({homepage, setHomepage}){
+
     const handleSinglePlayer = () => {
         setHomepage(false);
     };
@@ -9,12 +12,11 @@ export default function Homepage (homepage, setHomepage){
     };
 
     return (
-        <div className="grid">
-            <h1>
-                Wordle
-            </h1>
-            <button class="mode" className="flex" onClick={() => handleSinglePlayer}>single player</button>
-            <button class="mode" className="flex" onClick={() => handleMultiplayer}>multiplayer</button>
+        <div className="homepage">
+            <h1>Wordle</h1>
+            <button className="mode from-center" onClick={() => handleSinglePlayer}>single player</button>
+            <button className="mode from-center" onClick={() => handleMultiplayer}>multiplayer</button>
+            <Footer />
         </div>
     );
 };
