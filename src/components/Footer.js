@@ -7,10 +7,10 @@ const Footer = () => {
             <div className="container">
                 <div className="credits">
                     <p>
-                        Developed by <a href="/">Rabin Kaspal</a>
+                        Developed by <a href="/">Wordle team</a>
                     </p>
                     <a
-                        href="https://github.com/rabinkaspal/react-wordle"
+                        href="https://github.com/ergs0204/wp1121_wordle"
                         target="_blank"
                         rel="noreferrer"
                     >

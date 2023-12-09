@@ -48,8 +48,7 @@ const Wordle = ({ words, solution }) => {
                     closeModal={closeModal}
                 />
             )}
-            <div className="moves">Moves: {turn}/6</div>
-            <Grid guesses={guesses} currentGuess={currentGuess} turn={turn} />
+            {/* <div className="moves">Moves: {turn}/6</div> */}
             {errorMsg && (
                 <div className="error">
                     <p>{errorMsg}</p>
@@ -63,6 +62,7 @@ const Wordle = ({ words, solution }) => {
                     </button>
                 </div>
             )}
+            <Grid guesses={guesses} currentGuess={currentGuess} turn={turn} />
             <Keypad letters={letters} usedKeys={usedKeys} />
         </div>
     );

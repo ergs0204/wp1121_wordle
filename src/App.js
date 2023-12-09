@@ -4,10 +4,12 @@ import "./App.css";
 // import words from "./data/wordDb";
 import dictionary from "./data/dictionary";
 import Footer from "./components/Footer";
+import Homepage from "./components/Homepage";
 
 function App() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
+    const [homepage, setHomepage] = useState(false);
 
     useEffect(() => {
         const dictWords = Object.keys(dictionary).filter(
@@ -21,11 +23,16 @@ function App() {
         console.log("solution", solution);
     }, []);
 
-    return (
+    return (    
         <div className="App">
-            <h1>React Wordle</h1>
-            <Wordle solution={solution} words={words} />
-            <Footer />
+            {homepage && <Homepage />}
+            {!homepage && 
+                <div>
+                    <h1>Wordle</h1>
+                    <Wordle solution={solution} words={words} />
+                    <Footer />
+                </div>
+            }
         </div>
     );
 }
