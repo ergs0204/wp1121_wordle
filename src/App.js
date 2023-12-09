@@ -25,13 +25,16 @@ function App() {
 
     return (    
         <div className="App">
-            {homepage && <Homepage />}
-            {!homepage && 
-                <div>
-                    <h1>Wordle</h1>
-                    <Wordle solution={solution} words={words} />
-                    <Footer />
-                </div>
+            {homepage 
+            ? 
+            <Homepage homepage={homepage} setHomepage={setHomepage}/>
+            : 
+            <div>
+                <button className="flex" onClick={() => {setHomepage(true)}}>Home</button>
+                <h1>Wordle</h1>
+                <Wordle solution={solution} words={words} />
+                <Footer />
+            </div>
             }
         </div>
     );
