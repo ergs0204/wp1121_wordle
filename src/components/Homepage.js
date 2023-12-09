@@ -1,6 +1,7 @@
 import React from "react";
 import Footer from "./Footer";
 import {useState} from "react";
+import { convertLength } from "@mui/material/styles/cssUtils";
 
 export default function Homepage ({homepage, setHomepage}){
 
@@ -8,14 +9,15 @@ export default function Homepage ({homepage, setHomepage}){
         setHomepage(false);
     };
     const handleMultiplayer = () => {
-        setHomepage(false);
+        // setHomepage(false);
     };
 
     return (
         <div className="homepage">
             <h1>Wordle</h1>
-            <button className="mode from-center" onClick={() => handleSinglePlayer}>single player</button>
-            <button className="mode from-center" onClick={() => handleMultiplayer}>multiplayer</button>
+            {console.log(homepage)}
+            <button className="mode from-center" onClick={handleSinglePlayer}>single player</button>
+            <button className="mode from-center" onClick={handleMultiplayer}>multiplayer</button>
             <Footer />
         </div>
     );
