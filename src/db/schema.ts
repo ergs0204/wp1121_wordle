@@ -58,8 +58,8 @@ export const corpusTable = pgTable(
   }
 )
 // word corpus relation table
-export const WordCorpusRelationTable = pgTable(
-  "WordCorpusRelation",
+export const wordCorpusRelationTable = pgTable(
+  "wordCorpusRelation",
   {
     id: serial("id").primaryKey(),
     wordId: serial("word_id")
@@ -132,3 +132,27 @@ export const guessesTable = pgTable(
 
   },
 );
+
+/*
+// secretTable
+export const secretTable = pgTable(
+  "secret",
+  {
+    id: serial("id").primaryKey(),
+    userId: uuid("user_id")
+    .notNull()
+    .references(() => usersTable.displayId, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+    gameId: serial("game_id")
+    .notNull()
+    .references(() => gamesTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+    timestamp: timestamp("timestmp").notnull(),
+
+  },
+);
+*/
