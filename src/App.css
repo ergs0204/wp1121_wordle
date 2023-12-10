@@ -229,6 +229,17 @@ h1 {
     height: 100%;
 }
 
+/* timer */
+
+.timer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    font-size: 1.5rem;
+}
+
 /* keypad */
 .keypad {
     margin-top: 20px;
@@ -236,6 +247,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
 }
 
 .keypad .row {

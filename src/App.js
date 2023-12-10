@@ -4,11 +4,14 @@ import "./App.css";
 // import words from "./data/wordDb";
 import dictionary from "./data/dictionary";
 import Homepage from "./components/Homepage";
+import Timer from "./components/Timer";
 
 function App() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
     const [homepage, setHomepage] = useState(true);
+    let startTime = new Date();
+    setInterval(updateTimer, 1000);
 
     useEffect(() => {
         const dictWords = Object.keys(dictionary).filter(
@@ -22,6 +25,14 @@ function App() {
         console.log("solution", solution);
     }, []);
 
+    function updateTimer() {
+        const elapsedTime = new Date() - startTime; 
+        const minutes = Math.floor(elapsedTime / 60000); 
+        const seconds = Math.floor((elapsedTime % 60000) / 1000); 
+        const timerDisplay = `${minutes}:${seconds.toString().padStart(2, "0")}`; 
+        return timerDisplay; 
+      }
+
     return (
         <div className="App">
             {homepage 
@@ -31,6 +42,7 @@ function App() {
             <div>
                 <button className="back" onClick={() => {setHomepage(true)}}>Home</button>
                 <h1>Wordle</h1>
+                <Timer />
                 <Wordle solution={solution} words={words} />
             </div>
             }
