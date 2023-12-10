@@ -591,6 +591,7 @@ const words = [
     "haver",
     "bowse",
     "anent",
+    "salad",
     "jamie",
     "iscsi",
     "gride",

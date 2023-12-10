@@ -43,6 +43,9 @@ export default function Modal({
                 )}
                 <p className="solution">THE SOLUTION IS: </p>
                 {solutionBlock}
+                <button className="reset" onClick={newGame}>
+                    Play Again
+                </button>
                 <button
                     className="anchor"
                     onClick={() => setShowDefn(prev => !prev)}
@@ -52,9 +55,6 @@ export default function Modal({
                 <div className={`meaning ${showDefn ? "show" : ""}`}>
                     <p className="definition">{dictionary[solution]}</p>
                 </div>
-                <button className="reset" onClick={newGame}>
-                    Play Again
-                </button>
             </div>
         </div>
     );

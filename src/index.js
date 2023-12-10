@@ -15,12 +15,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
         <ThemeProvider theme={darkTheme}>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<App />} />
-                <Route path="/newgame" element={<Navigate to="/" />} />
-            </Routes>
-        </BrowserRouter>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<App />} />
+                    <Route path="/newgame" element={<Navigate to="/" />} />
+                </Routes>
+            </BrowserRouter>
         </ThemeProvider>
     </React.StrictMode>
 );
