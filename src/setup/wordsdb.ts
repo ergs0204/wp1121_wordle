@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
-import { db } from "@/db";
-import {wordCorpusRelationTable, wordsTable} from "@/db/schema";
+import { db } from "../db/index";
+import {wordCorpusRelationTable, wordsTable} from "../db/schema";
+console.log("Start")
 
 const fs = require('fs')
 const path = require('path');
@@ -22,8 +23,8 @@ function getFiles(dir, files = []) {
   return files
 }
 
-var s = require('./all.json');
-f=getFiles("./");
+const f=getFiles("./");
+// console.log(db)
 
 for (let i = 0; i < f.length; i++){
 	if (f[i].includes(".json")){
@@ -32,9 +33,6 @@ for (let i = 0; i < f.length; i++){
 		const corpusName= path.basename(f[i],".json")
 		console.log(words.slice(0,5))
 		console.log(corpusName)
-
-
 	}
-
 }
 
