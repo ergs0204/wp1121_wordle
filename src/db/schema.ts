@@ -99,8 +99,8 @@ export const gamesTable = pgTable(
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-    startTime: timestamp("start_time").notnull(),
-    endTime: timestamp("end_time").notnull(),
+    startTime: timestamp("start_time").defaultNow().notNull(),
+    endTime: timestamp("end_time").notNull(),
   },
 );
 
@@ -127,8 +127,8 @@ export const guessesTable = pgTable(
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-    turn: integer("turn").notnull(),
-    timestamp: timestamp("timestmp").notnull(),
+    turn: integer("turn").notNull(),
+    timestamp: timestamp("timestmp"),
 
   },
 );
