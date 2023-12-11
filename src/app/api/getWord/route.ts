@@ -8,7 +8,15 @@ import type {} from "@/types";
 
 export async function GET() {
   try {
+    console.log("Getting word")
     const corpusId = req.nextUrl.searchParams.get('corpusId');
+    console.log(corpusId)
+    if (!corpusId){
+       return NextResponse.json(
+        { error: "corpusId is required" },
+        { status: 400 },
+      );
+    }
     const randomWordId = await db
       .select("wordId")
       .from(wordCorpusRelationTable)
@@ -19,36 +27,6 @@ export async function GET() {
       .select("word")
       .from(wordsTable)
       .where({ randomWordId });
-    /*
-    
-    const secret= (()=> {
-      let result = '';
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let counter = 0;
-      while (counter < 6) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-        counter += 1;
-      }
-      return "CTF{"+result;
-    })();
-    // add userid/gameid/ans to secretTable DNF
-     await db
-      .insertInto(secretTable)
-      .values({
-        userId: gameInfo.userId,
-        wordId: wordId,
-        corpusId: gameInfo.corpusId,
-        startTime: gameInfo.startTime,
-        endTime: gameInfo.endTime,
-      })
-      .execute();
-    
-    const data = CryptoJS.AES.encrypt(
-      secret,
-      randomWord
-    ).toString();
-    return NextResponse.json(data);
-    */
     return NextResponse.json(randomWord);
   } catch (error) {
     return NextResponse.json(
