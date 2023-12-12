@@ -20,7 +20,8 @@ services:
       - 8080:8080
 
   # dbsetup:
+  #   image: postgres:16
   #   depends_on:
   #     - postgresql
   #   restart: "no"
-  #   command: "command"
+  #   entrypoint: [ "bash", "-c", "python3 ./setup/todb.py;"]

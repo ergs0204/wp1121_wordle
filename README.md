@@ -4,6 +4,10 @@
    ```bash
    yarn
    ```
+   ```bash
+   sudo apt install python3
+   pip3 install psycopg2-binary
+   ```
 
 2. Create `.env.local` file in the project root and add the following content:
 
@@ -21,11 +25,16 @@
    ```bash
    yarn migrate
    ```
-5. Start the development server
+5. Load corpus
+   ```bash
+   cd setup
+   python3 loadcorpus.py
+   ```
+6. Start the development server
    ```bash
    yarn dev
    ```
-6. Open http://localhost:3000 in your browser
+7. Open http://localhost:3000 in your browser
 
 # Setup Guide
 

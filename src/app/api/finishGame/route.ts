@@ -19,23 +19,7 @@ export async function POST(req: NextRequest) {
     if (wordRecord.length === 0) {
       return NextResponse.json({ error: "Word not found" }, { status: 404 });
     }
-    /*
-    // check answer
-    const valid = await db
-    .select({
-      id: wordsTable.id,
-    })
-    .from(secretTable)
-    .where(and(
-      eq(secretTable.word, gameInfo.word),
-      eq(secretTable.userId,gameInfo.userId),
-      eq(secretTable.gameId,gameInfo.gameId)
-      ))
-    .execute();
-    if (!valid) {
-      return NextResponse.json({ message: "Wrong answer" }, { status: 200 });
-    }
-    */
+
     const wordId = wordRecord[0].id;
     const insertedGame = await db
       .insertInto(gamesTable)
