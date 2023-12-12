@@ -45,7 +45,8 @@ export const wordsTable = pgTable(
   "words",
   {
     id: serial("id").primaryKey(),
-    word:varchar("word", { length: 100 }).unique(),
+    word:varchar("word", { length: 100 }).notNull().unique(),
+    definition:varchar("definition", { length: 1000 }),
   }
 )
 

@@ -1,3 +1,4 @@
+import { getFontDefinitionFromNetwork } from "next/dist/server/font-utils";
 import { NextResponse, type NextRequest } from "next/server";
 
 //import CryptoJS from "crypto-js";
@@ -28,10 +29,16 @@ export async function GET(req: NextRequest) {
       .orderBy(sql`RANDOM()`)
       .limit(1);
     const randomWord = await db
-      .select({ word: wordsTable.word })
+      .select({
+        word: wordsTable.word,
+        definition: wordsTable.definition,
+      })
       .from(wordsTable)
       .where(eq(wordsTable.id, randomWordId[0].wordId));
-    return NextResponse.json(randomWord);
+    return NextResponse.json({
+      word: randomWord[0].word,
+      definition: randomWord[0].definition,
+    });
   } catch (error) {
     return NextResponse.json(
       {
