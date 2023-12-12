@@ -2,12 +2,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { gamesTable, guessesTable, scoresTable, wordsTable } from "@/db/schema";
-import type { GameInfo, Guess } from "@/types";
+import type { GameInfo, Guess } from "@/lib/types/type";
 
 export async function POST(req: NextRequest) {
   try {
+    
     const gameInfo: GameInfo = await req.json();
-
+    
     const wordRecord = await db
       .select({
         id: wordsTable.id,
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest) {
       .from(wordsTable)
       .where(eq(wordsTable.word, gameInfo.word))
       .execute();
-
+    
     if (wordRecord.length === 0) {
       return NextResponse.json({ error: "Word not found" }, { status: 404 });
     }
@@ -36,21 +37,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Wrong answer" }, { status: 200 });
     }
     */
+    
     const wordId = wordRecord[0].id;
+    // console.log(gameInfo);
     const insertedGame = await db
-      .insertInto(gamesTable)
+      .insert(gamesTable)
       .values({
         userId: gameInfo.userId,
         wordId: wordId,
         corpusId: gameInfo.corpusId,
-        startTime: gameInfo.startTime,
-        endTime: gameInfo.endTime,
+        startTime: new Date(gameInfo.startTime),
+        endTime: new Date(gameInfo.endTime),
       })
-      .returning('*')
-      .execute();
-
-    for (const guess of gameInfo.
-         es) {
+      .returning();
+    for (const guess of gameInfo.guesses) {
       const guessWordRecord = await db
         .select({
           id: wordsTable.id,
@@ -65,26 +65,36 @@ export async function POST(req: NextRequest) {
       const guessWordId = guessWordRecord[0].id;
 
       await db
-        .insertInto(guessesTable)
+        .insert(guessesTable)
         .values({
           gameId: insertedGame[0].id,
+          userId: gameInfo.userId,
           wordId: guessWordId,
-          timestamp: guess.timestamp,
+          timestamp: new Date(guess.timestamp),
           turn: guess.turn,
         })
         .execute();
     }
+    const currentScoreRecord = await db
+    .select({
+      score: scoresTable.score,
+    })
+    .from(scoresTable)
+    .where(eq(scoresTable.userId, gameInfo.userId))
+    .execute();
 
+  const currentScore = currentScoreRecord[0].score ? currentScoreRecord[0].score : 0;
     await db
       .update(scoresTable)
       .set({
-        score: scoresTable.score + 1,
+        score: currentScore + 1,
       })
       .where(eq(scoresTable.userId, gameInfo.userId))
       .execute();
 
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

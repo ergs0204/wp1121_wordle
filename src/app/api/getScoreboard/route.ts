@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
+
+import { eq, desc } from "drizzle-orm";
+
 import { db } from "@/db";
-import { eq } from "drizzle-orm";
 import { scoresTable, gamesTable, guessesTable, wordsTable } from "@/db/schema";
-import type { UserInfo, GameInfo, Guess } from "@/types";
+import type { UserInfo, GameInfo, Guess } from "@/lib/types/type";
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,7 +14,7 @@ export async function GET(req: NextRequest) {
         score: scoresTable.score,
       })
       .from(scoresTable)
-      .orderBy({ score: "desc" })
+      .orderBy(desc(scoresTable.score))
       .limit(10)
       .execute();
 
@@ -28,37 +30,45 @@ export async function GET(req: NextRequest) {
           endTime: gamesTable.endTime,
         })
         .from(gamesTable)
-        .leftjoin(wordsTable, eq(gamesTable.wordId, wordsTable.id))
+        .leftJoin(wordsTable, eq(gamesTable.wordId, wordsTable.id))
         .where(eq(gamesTable.userId, userId))
         .execute();
+      const gameInfos: GameInfo[] = await Promise.all(
+        games.map(async (game) => {
+          const guesses = await db
+            .select({
+              word: wordsTable.word,
+              timestamp: guessesTable.timestamp,
+              turn: guessesTable.turn,
+            })
+            .from(guessesTable)
+            .leftJoin(wordsTable, eq(guessesTable.wordId, wordsTable.id))
+            .where(eq(guessesTable.gameId, game.gameId))
+            .execute();
 
-      for (const game of games) {
-        const guesses = await db
-          .select({
-            word: wordsTable.word,
-            timestamp: guessesTable.timestamp,
-            turn: guessesTable.turn,
-          })
-          .from(guessesTable)
-          .leftjoin(wordsTable, eq(guessesTable.wordId, wordsTable.id))
-          .where(eq(guessesTable.gameId, game.gameId))
-          .execute();
-
-        game.guesses = guesses as Guess[];
-      }
+          return {
+            gameId: game.gameId,
+            userId: userId,
+            word: game.word || "error",
+            corpusId: game.corpusId,
+            startTime: game.startTime,
+            endTime: game.endTime,
+            guesses: guesses as Guess[],
+          };
+        }),
+      );
 
       userInfos.push({
-        userId,
-        score,
-        games: games as GameInfo[],
+        userId: userId,
+        score: score ? score : 0,
+        games: gameInfos,
       });
     }
-
     return NextResponse.json(userInfos, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

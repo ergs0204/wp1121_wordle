@@ -1,6 +1,7 @@
 {
   "name": "112-1-unit2-wordle-clone",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -128,7 +128,7 @@ export const guessesTable = pgTable(
       onUpdate: "cascade",
     }),
     turn: integer("turn").notNull(),
-    timestamp: timestamp("timestmp"),
+    timestamp: timestamp("timestamp"),
 
   },
 );

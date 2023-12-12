@@ -1,7 +1,7 @@
 export type GameInfo = {
   userId: string,
   word: string,
-  corpusId: string,
+  corpusId: number,
   startTime: Date,
   endTime: Date,
   guesses: Guess[],
