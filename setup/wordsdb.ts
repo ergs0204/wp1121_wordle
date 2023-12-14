@@ -1,3 +1,4 @@
+<<<<<<<< HEAD:src/setup/wordsdb.js
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -33,6 +34,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             op = body.call(thisArg, _);
         } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+========
+import { and, eq } from "drizzle-orm";
+import { db } from "../db/index";
+import {wordCorpusRelationTable, wordsTable, corpusTable} from "../db/schema";
+console.log("Start")
+
+const fs = require('fs')
+const path = require('path');
+function getFiles(dir, files = []) {
+  // Get an array of all files and directories in the passed directory using fs.readdirSync
+  const fileList = fs.readdirSync(dir)
+  // Create the full path of the file/directory by concatenating the passed directory and file/directory name
+  for (const file of fileList) {
+    const name = `${dir}/${file}`
+    // Check if the current file/directory is a directory using fs.statSync
+    if (fs.statSync(name).isDirectory()) {
+      // If it is a directory, recursively call the getFiles function with the directory path and the files array
+      getFiles(name, files)
+    } else {
+      // If it is a file, push the full path to the files array
+      files.push(name)
+>>>>>>>> backend:setup/wordsdb.ts
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -53,6 +76,7 @@ function getFiles(dir, files) {
     }
     return files;
 }
+<<<<<<<< HEAD:src/setup/wordsdb.js
 var f = getFiles("./");
 f.forEach(function (file) { return __awaiter(void 0, void 0, void 0, function () {
     var words, corpusName;
@@ -72,3 +96,27 @@ f.forEach(function (file) { return __awaiter(void 0, void 0, void 0, function ()
         }
     });
 }); });
+========
+
+const f=getFiles("./");
+
+
+for (let i = 0; i < f.length; i++){
+	if (f[i].includes(".json")){
+		console.log(f[i])
+		const words=require(f[i])
+		const corpusName= path.basename(f[i],".json")
+		console.log(words.slice(0,5))
+		console.log(corpusName)
+    const insertedCorpus = await db
+      .insertInto(corpusTable)
+      .values({
+        corpusName: corpusName,
+      })
+      .returning('*')
+      .execute();
+    console.log(insertedCorpus)
+	}
+}
+
+>>>>>>>> backend:setup/wordsdb.ts
