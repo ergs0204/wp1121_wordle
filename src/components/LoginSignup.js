@@ -4,15 +4,23 @@ import user_icon from "../components/assets/person.png";
 import email_icon from "../components/assets/email.png";
 import password_icon from "../components/assets/password.png";
 
-export default function LoginSignup() {
+export default function LoginSignup({setPage}) {
 
     const [action, setAction] = useState("Sign up");
+
+    const handleLogin = () => {
+        setPage("home");
+    };
 
     return (
         <div className="loginsignup">
             <div className="header">
-                <div className="text">{action}</div>
+                <div className="text">{action} for Wordle</div>
                 <div className="underline"></div>
+            </div>
+            <div className="submit-container">
+                <div className={action==="Login"?"submit gray":"submit"} onClick={()=>{setAction("Sign up")}}>Sign up</div>
+                <div className={action==="Sign up"?"submit gray":"submit"} onClick={()=>{setAction("Login")}}>Login</div>
             </div>
             <div className="inputs">
                 {action==="Login"
@@ -34,8 +42,7 @@ export default function LoginSignup() {
                 </div>
             </div>
             <div className="submit-container">
-                <div className={action==="Login"?"submit gray":"submit"} onClick={()=>{setAction("Sign up")}}>Sign up</div>
-                <div className={action==="Sign up"?"submit gray":"submit"} onClick={()=>{setAction("Login")}}>Login</div>
+                <button className="enter" onClick={handleLogin}>go!</button>
             </div>
         </div>
     );

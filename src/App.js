@@ -6,11 +6,13 @@ import dictionary from "./data/dictionary";
 import Homepage from "./components/Homepage";
 import LoginSignup from "./components/LoginSignup";
 import Timer from "./components/Timer";
+import Statistic from "./components/Statistic";
 
 function App() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
-    const [homepage, setHomepage] = useState(true);
+    const [page, setPage] = useState("home");
+
     let startTime = new Date();
     setInterval(updateTimer, 1000);
 
@@ -36,18 +38,27 @@ function App() {
 
     return (
         <div className="App">
-            {homepage 
-            ? 
-            // <LoginSignup />
-            <Homepage homepage={homepage} setHomepage={setHomepage}/>
-            : 
+            {page==="login" && <LoginSignup setPage={setPage} />}
+            {page==="home" && <Homepage setPage={setPage} />}
+            {page==="singlePlayer" 
+            && 
             <div>
-                <button className="back" onClick={() => {setHomepage(true)}}>Home</button>
-                <h1>Wordle</h1>
+                <button className="back" onClick={() => {setPage("home")}}>Home</button>
+                <h1 className="title">Wordle</h1>
                 <Timer />
                 <Wordle solution={solution} words={words} />
             </div>
             }
+            {page==="multiPlayer" 
+            && 
+            <div>
+                <button className="back" onClick={() => {setPage("home")}}>Home</button>
+                <h1 className="title">Wordle</h1>
+                <Timer />
+                <Wordle solution={solution} words={words} />
+            </div>
+            }
+            {page==="statistic" && <Statistic setPage={setPage} />}
         </div>
     );  
 }
