@@ -1,14 +1,32 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { z } from "zod";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { gamesTable, guessesTable, scoresTable, wordsTable } from "@/db/schema";
 import type { GameInfo, Guess } from "@/lib/types/type";
 
+const gameInfoSchema = z.object({
+  userId: z.string(),
+  word: z.string().min(1).max(50),
+  corpusId: z.number(),
+  startTime: z.string().transform((str) => new Date(str)),
+  endTime: z.string().transform((str) => new Date(str)),
+  guesses: z.object({
+    word: z.string().min(1).max(50),
+    timestamp: z.string().transform((str) => new Date(str)),
+    turn: z.number().min(1).max(10),
+  }).array(),
+});
+
 export async function POST(req: NextRequest) {
+  const gameInfo = await req.json();
   try {
-    
-    const gameInfo: GameInfo = await req.json();
-    
+    gameInfoSchema.parse(gameInfo);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+  try {
     const wordRecord = await db
       .select({
         id: wordsTable.id,
