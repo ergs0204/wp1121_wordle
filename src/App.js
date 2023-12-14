@@ -4,6 +4,7 @@ import "./App.css";
 // import words from "./data/wordDb";
 import dictionary from "./data/dictionary";
 import Homepage from "./components/Homepage";
+import LoginSignup from "./components/LoginSignup";
 import Timer from "./components/Timer";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <div className="App">
             {homepage 
             ? 
+            // <LoginSignup />
             <Homepage homepage={homepage} setHomepage={setHomepage}/>
             : 
             <div>

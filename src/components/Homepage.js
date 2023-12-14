@@ -13,14 +13,17 @@ export default function Homepage ({homepage, setHomepage}){
     const handleStatistic = () => {
         // setHomepage(false);
     };
+    const handleLogout = () => {
+        // setHomepage(false);
+    };
 
     return (
         <div className="homepage">
             <h1>Wordle</h1>
-            {console.log(homepage)}
             <button className="mode from-center" onClick={handleSinglePlayer}>single player</button>
             <button className="mode from-center" onClick={handleMultiplayer}>multiplayer</button>
             <button className="mode from-center" onClick={handleStatistic}>statistic</button>
+            <button className="mode from-center" onClick={handleLogout}>logout</button>
             <Footer />
         </div>
     );
