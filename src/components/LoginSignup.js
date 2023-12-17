@@ -79,7 +79,7 @@ export default function LoginSignup({setPage}) {
             <div>
                 <div className="message">{user}, Welcome!</div>
                 <br />
-                <button className="enter" onClick={() => {setPage("home")}}>Play Game!</button>
+                <button className="playgame" onClick={() => {setPage("home")}}>Play Wordle!</button>
             </div>
             :
             (<>
