@@ -11,7 +11,7 @@ import Statistic from "./components/Statistic";
 function App() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
-    const [page, setPage] = useState("home");
+    const [page, setPage] = useState("login");
 
     let startTime = new Date();
     setInterval(updateTimer, 1000);
@@ -34,7 +34,9 @@ function App() {
         const seconds = Math.floor((elapsedTime % 60000) / 1000); 
         const timerDisplay = `${minutes}:${seconds.toString().padStart(2, "0")}`; 
         return timerDisplay; 
-      }
+    }
+
+    
 
     return (
         <div className="App">

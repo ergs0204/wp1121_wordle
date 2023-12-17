@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import LoginSignup from "./components/LoginSignup";
   
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -11,7 +12,7 @@ root.render(
                 <Routes>
                     <Route path="/" element={<App />} />
                     <Route path="/newgame" element={<Navigate to="/" />} />
-                    {/* <Route path="/login" element={<Navigate to="/auth" />} /> */}
+                    <Route path="/auth" element={<LoginSignup />} />
                 </Routes>
             </BrowserRouter>
     </React.StrictMode>
