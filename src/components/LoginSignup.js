@@ -1,11 +1,15 @@
 import React, { useRef } from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import user_icon from "../components/assets/person.png";
 import password_icon from "../components/assets/password.png";
+import AuthContext from "../context/AuthProvider";
+import axios from "../api/axios";
+const LOGIN_URL = "/auth";
 
 
 export default function LoginSignup({setPage}) {
 
+    const {setAuth} = useContext(AuthContext);
     const [action, setAction] = useState("Sign up");
     const userRef = useRef();
     const errorRef = useRef();
@@ -33,41 +37,67 @@ export default function LoginSignup({setPage}) {
             setErrorMsg("Passwords do not match!");
             return;
         }
-        // if (action === "Sign up") {
-        //     const res = await fetch("/api/signup", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({
-        //             username: user,
-        //             password: pwd,
-        //         }),
-        //     });
-        //     const data = await res.json();
-        //     if (data.error) {
-        //         setErrorMsg(data.error);
-        //     } else {
-        //         setSuccess(true);
-        //     }
-        // } else {
-        //     const res = await fetch("/api/login", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({
-        //             username: user,
-        //             password: pwd,
-        //         }),
-        //     });
-        //     const data = await res.json();
-        //     if (data.error) {
-        //         setErrorMsg(data.error);
-        //     } else {
-        //         setSuccess(true);
-        //     }
-        // }
+        if (action === "Sign up" && pwd.length < 4) {
+            setErrorMsg("Password must be at least 4 characters!");
+            return;
+        }
+        if (action === "login") {
+            try {
+                const response = await axios.post(LOGIN_URL, 
+                    JSON.stringify({user, pwd}),
+                    {
+                        headers: {'Content-Type': 'application/json'},
+                        withCredentials: true
+                    }
+                );
+                console.log(JSON.stringify(response?.data));
+                // console.log(JSON.stringify(response));
+                const accessToken = response?.data?.accessToken;
+                const roles = response?.data?.roles;
+                setAuth({ user, pwd, roles, accessToken });
+            } catch (err) {
+                if(!err?.response){
+                    setErrorMsg("No response from server!");
+                }
+                else if(err.response.status === 400){
+                    setErrorMsg("Missing username or password!");
+                }
+                else if(err.response.status === 401){
+                    setErrorMsg("Unauthorized!");
+                }
+                else{
+                    setErrorMsg("Login Failed!");
+                }
+                errorRef.current.focus();
+            }
+        }
+        else if (action === "Sign up"){
+            try {
+                const response = await axios.post(LOGIN_URL + "/signup", 
+                    JSON.stringify({user, pwd}),
+                    {
+                        headers: {'Content-Type': 'application/json'},
+                        withCredentials: true
+                    }
+                );
+                console.log(JSON.stringify(response?.data));
+                // console.log(JSON.stringify(response));
+                const accessToken = response?.data?.accessToken;
+                const roles = response?.data?.roles;
+                setAuth({ user, pwd, roles, accessToken });
+            } catch (err) {
+                if(!err?.response){
+                    setErrorMsg("No response from server!");
+                }
+                else if(err.response.status === 400){
+                    setErrorMsg("Username already exists!");
+                }
+                else{
+                    setErrorMsg("Sign up Failed!");
+                }
+            }
+        }
+        
         console.log(user, pwd, confirmPwd);
         setSuccess(true)
     }
