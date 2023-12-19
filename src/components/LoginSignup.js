@@ -29,7 +29,7 @@ export default function LoginSignup({setPage}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (user === "" || pwd === "") {
+        if (user === "" || pwd === "" || (action === "Sign up" && confirmPwd === "")) {
             setErrorMsg("Username and password cannot be empty!");
             return;
         }
@@ -41,7 +41,7 @@ export default function LoginSignup({setPage}) {
             setErrorMsg("Password must be at least 4 characters!");
             return;
         }
-        if (action === "login") {
+        if (action === "Login") {
             try {
                 const response = await axios.post(LOGIN_URL, 
                     JSON.stringify({user, pwd}),
@@ -55,6 +55,7 @@ export default function LoginSignup({setPage}) {
                 const accessToken = response?.data?.accessToken;
                 const roles = response?.data?.roles;
                 setAuth({ user, pwd, roles, accessToken });
+                // setSuccess(true)
             } catch (err) {
                 if(!err?.response){
                     setErrorMsg("No response from server!");
@@ -85,6 +86,7 @@ export default function LoginSignup({setPage}) {
                 const accessToken = response?.data?.accessToken;
                 const roles = response?.data?.roles;
                 setAuth({ user, pwd, roles, accessToken });
+                // setSuccess(true)
             } catch (err) {
                 if(!err?.response){
                     setErrorMsg("No response from server!");
@@ -95,24 +97,16 @@ export default function LoginSignup({setPage}) {
                 else{
                     setErrorMsg("Sign up Failed!");
                 }
+                errorRef.current.focus();
             }
         }
-        
         console.log(user, pwd, confirmPwd);
         setSuccess(true)
+        window.location.href = "/";
     }
 
     return (
         <div className="loginsignup">
-            {success 
-            ? 
-            <div>
-                <div className="message">{user}, Welcome!</div>
-                <br />
-                <button className="playgame" onClick={() => {setPage("home")}}>Play Wordle!</button>
-            </div>
-            :
-            (<>
             <div className="header">
                 <div className="text">{action} for Wordle</div>
                 <div className="underline"></div>
@@ -161,13 +155,11 @@ export default function LoginSignup({setPage}) {
                 </div>
                 </>
                 }
-                
             </div>
+            <br />
             <div className="submit-container">
-                <button className="enter" onClick={handleSubmit}>go!</button>
+                <button className="playgame" onClick={handleSubmit}>go!</button>
             </div>
-            </>)
-}
         </div>
     );
 }

@@ -11,7 +11,7 @@ import Statistic from "./components/Statistic";
 function App() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
-    const [page, setPage] = useState("login");
+    // const [page, setPage] = useState("login");
 
     let startTime = new Date();
     setInterval(updateTimer, 1000);
@@ -25,7 +25,7 @@ function App() {
         let wordIndex = Math.floor(Math.random() * wordSize);
         const solution = dictWords[wordIndex];
         setSolution(solution);
-        console.log("solution", solution);
+        // console.log("solution", solution);
     }, []);
 
     function updateTimer() {
@@ -37,30 +37,14 @@ function App() {
     }
 
     
-
     return (
         <div className="App">
-            {page==="login" && <LoginSignup setPage={setPage} />}
-            {page==="home" && <Homepage setPage={setPage} />}
-            {page==="singlePlayer" 
-            && 
             <div>
-                <button className="back" onClick={() => {setPage("home")}}>Home</button>
+                <button className="back"><a href="/">Home</a></button>
                 <h1 className="title">Wordle</h1>
                 <Timer />
                 <Wordle solution={solution} words={words} />
             </div>
-            }
-            {page==="multiPlayer" 
-            && 
-            <div>
-                <button className="back" onClick={() => {setPage("home")}}>Home</button>
-                <h1 className="title">Wordle</h1>
-                <Timer />
-                <Wordle solution={solution} words={words} />
-            </div>
-            }
-            {page==="statistic" && <Statistic setPage={setPage} />}
         </div>
     );  
 }

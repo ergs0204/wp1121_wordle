@@ -1,28 +1,15 @@
 import React from "react";
 import Footer from "./Footer";
 
-export default function Homepage ({setPage}){
-
-    const handleSinglePlayer = () => {
-        setPage("singlePlayer");
-    };
-    const handleMultiplayer = () => {
-        setPage("multiPlayer");
-    };
-    const handleStatistic = () => {
-        setPage("statistic");
-    };
-    const handleLogout = () => {
-        setPage("login");
-    };
+export default function Homepage (){
 
     return (
         <div className="homepage">
             <h1 className="title">Wordle</h1>
-            <button className="mode from-center" onClick={handleSinglePlayer}>single player</button>
-            <button className="mode from-center" onClick={handleMultiplayer}>multiplayer</button>
-            <button className="mode from-center" onClick={handleStatistic}>statistic</button>
-            <button className="mode from-center" onClick={handleLogout}>logout</button>
+            <button className="mode from-center"><a href="/newSgame">single player</a></button>
+            <button className="mode from-center"><a href="/newMgame">multiplayer</a></button>
+            <button className="mode from-center"><a href="/statistic">statistic</a></button>
+            <button className="mode from-center"><a href="/auth">logout</a></button>
             <Footer />
         </div>
     );

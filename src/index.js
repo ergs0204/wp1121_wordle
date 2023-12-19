@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import LoginSignup from "./components/LoginSignup";
 import { AuthProvider } from "./context/AuthProvider";
+import Homepage from "./components/Homepage";
+import Statistic from "./components/Statistic";
   
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,9 +14,13 @@ root.render(
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<App />} />
-                    <Route path="/newgame" element={<Navigate to="/" />} />
+                    <Route path="/" element={<Homepage />} />
                     <Route path="/auth" element={<LoginSignup />} />
+                    <Route path="/singleplayer" element={<App />} />
+                    <Route path="/multiplayer" element={<App />} />
+                    <Route path="/newSgame" element={<Navigate to="/singleplayer" />} />
+                    <Route path="/newMgame" element={<Navigate to="/multiplayer" />} />
+                    <Route path="/statistic" element={<Statistic />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
