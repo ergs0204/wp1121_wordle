@@ -2,12 +2,13 @@ import React, { useRef } from "react";
 import { useState, useEffect, useContext } from "react";
 import user_icon from "../components/assets/person.png";
 import password_icon from "../components/assets/password.png";
+import email_icon from "../components/assets/email.png";
 import AuthContext from "../context/AuthProvider";
 import axios from "../api/axios";
-const LOGIN_URL = "/auth";
+const LOGIN_URL = "http://localhost:8080/api/auth";
 
 
-export default function LoginSignup({setPage}) {
+export default function Auth() {
 
     const {setAuth} = useContext(AuthContext);
     const [action, setAction] = useState("Sign up");
@@ -15,9 +16,9 @@ export default function LoginSignup({setPage}) {
     const errorRef = useRef();
     const [user, setUser] = useState("");
     const [pwd, setPwd] = useState("");
+    const [email, setEmail] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
-    const [success, setSuccess] = useState(false);  
 
     useEffect(() => {
         userRef.current.focus();
@@ -25,12 +26,16 @@ export default function LoginSignup({setPage}) {
 
     useEffect(() => {
         setErrorMsg("");
-    }, [user, pwd, confirmPwd]);
+    }, [user, pwd, confirmPwd, email]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (user === "" || pwd === "" || (action === "Sign up" && confirmPwd === "")) {
             setErrorMsg("Username and password cannot be empty!");
+            return;
+        }
+        if (action === "Sign up" && email === "") {
+            setErrorMsg("Email cannot be empty!");
             return;
         }
         if (action === "Sign up" && pwd !== confirmPwd) {
@@ -55,7 +60,6 @@ export default function LoginSignup({setPage}) {
                 const accessToken = response?.data?.accessToken;
                 const roles = response?.data?.roles;
                 setAuth({ user, pwd, roles, accessToken });
-                // setSuccess(true)
             } catch (err) {
                 if(!err?.response){
                     setErrorMsg("No response from server!");
@@ -75,7 +79,7 @@ export default function LoginSignup({setPage}) {
         else if (action === "Sign up"){
             try {
                 const response = await axios.post(LOGIN_URL + "/signup", 
-                    JSON.stringify({user, pwd}),
+                    JSON.stringify({user, pwd, email}),
                     {
                         headers: {'Content-Type': 'application/json'},
                         withCredentials: true
@@ -85,8 +89,7 @@ export default function LoginSignup({setPage}) {
                 // console.log(JSON.stringify(response));
                 const accessToken = response?.data?.accessToken;
                 const roles = response?.data?.roles;
-                setAuth({ user, pwd, roles, accessToken });
-                // setSuccess(true)
+                setAuth({ user, pwd, email, roles, accessToken });
             } catch (err) {
                 if(!err?.response){
                     setErrorMsg("No response from server!");
@@ -100,13 +103,12 @@ export default function LoginSignup({setPage}) {
                 errorRef.current.focus();
             }
         }
-        console.log(user, pwd, confirmPwd);
-        setSuccess(true)
+        console.log(user, pwd, confirmPwd, email);
         window.location.href = "/";
     }
 
     return (
-        <div className="loginsignup">
+        <div className="auth">
             <div className="header">
                 <div className="text">{action} for Wordle</div>
                 <div className="underline"></div>
@@ -150,6 +152,16 @@ export default function LoginSignup({setPage}) {
                         placeholder="Confirm Password" 
                         onChange={(e) => setConfirmPwd(e.target.value)}
                         value={confirmPwd}
+                        required
+                    />
+                </div>
+                <div className="input">
+                    <img src={email_icon} alt="user icon" />
+                    <input 
+                        type="email" 
+                        placeholder="Email" 
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
                         required
                     />
                 </div>

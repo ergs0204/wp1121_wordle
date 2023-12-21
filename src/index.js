@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import LoginSignup from "./components/LoginSignup";
+import Auth from "./components/Auth";
 import { AuthProvider } from "./context/AuthProvider";
 import Homepage from "./components/Homepage";
 import Statistic from "./components/Statistic";
@@ -15,7 +15,7 @@ root.render(
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Homepage />} />
-                    <Route path="/auth" element={<LoginSignup />} />
+                    <Route path="/auth" element={<Auth />} />
                     <Route path="/singleplayer" element={<App />} />
                     <Route path="/multiplayer" element={<App />} />
                     <Route path="/newSgame" element={<Navigate to="/singleplayer" />} />

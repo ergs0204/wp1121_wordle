@@ -5,8 +5,9 @@ import Modal from "./Modal";
 import { useNavigate } from "react-router-dom";
 import Keypad from "./Keypad";
 import letters from "../data/letters";
+import Timer from "./Timer";
 
-const Wordle = ({ words, solution }) => {
+const Wordle = ({ words, solution, beginTime }) => {
     const {
         currentGuess,
         setCurrentGuess,
@@ -22,6 +23,8 @@ const Wordle = ({ words, solution }) => {
 
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+    const [costTime, setcostTime] = useState("");
+    const [endTime, setEndTime] = useState("");
 
     useEffect(() => {
         window.addEventListener("keyup", handleKeyUp);
@@ -29,20 +32,26 @@ const Wordle = ({ words, solution }) => {
             setTimeout(() => setShowModal(true), 1500);
             window.removeEventListener("keyup", handleKeyUp);
         }
+        setEndTime(new Date().toLocaleTimeString());
         return () => window.removeEventListener("keyup", handleKeyUp);
     }, [handleKeyUp, isCorrect, turn]);
 
     const closeModal = () => {
         setShowModal(prev => !prev);
-        navigate("/newgame");
+        navigate("/newSgame");
     };
+    
 
     return (
         <div className="main">
+            <Timer showModal={showModal} setcostTime={setcostTime} />
             {showModal && (
                 <Modal
                     isCorrect={isCorrect}
                     turn={turn}
+                    costTime={costTime}
+                    beginTime={beginTime}
+                    endTime={endTime}
                     solution={solution}
                     resetGame={resetGame}
                     closeModal={closeModal}

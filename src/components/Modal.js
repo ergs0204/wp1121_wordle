@@ -5,6 +5,9 @@ export default function Modal({
     isCorrect,
     solution,
     turn,
+    costTime,
+    beginTime,
+    endTime,
     resetGame,
     closeModal,
 }) {
@@ -41,6 +44,9 @@ export default function Modal({
                         <p>Better luck next time :)</p>
                     </>
                 )}
+                <p className="time">Your time: {costTime}</p>
+                <p className="time">Start time: {beginTime}</p>
+                <p className="time">End time: {endTime}</p>
                 <p className="solution">THE SOLUTION IS: </p>
                 {solutionBlock}
                 <button className="reset" onClick={newGame}>
@@ -55,6 +61,13 @@ export default function Modal({
                 <div className={`meaning ${showDefn ? "show" : ""}`}>
                     <p className="definition">{dictionary[solution]}</p>
                 </div>
+                <br />
+                <button
+                    className="home"
+                    onClick={() => window.location.href = "/"}
+                >
+                    Home
+                </button>
             </div>
         </div>
     );
