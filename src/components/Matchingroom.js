@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
 const Matchingroom = () => {
   const [roomCode, setRoomCode] = useState('');
   const [socket, setSocket] = useState(null);
 
   const handleCreateRoom = () => {
-    const newSocket = io('http://localhost:5000'); // 服务器地址
-    newSocket.emit('create-room', roomCode);
-    setSocket(newSocket);
+    // const newSocket = io('http://localhost:5000'); 
+    // newSocket.emit('create-room', roomCode);
+    // setSocket(newSocket);
   };
 
   return (
-    <div>
-      {socket ? (
-      ) : (
+    <div className='matching'>
+      {!socket &&
         <div>
           <input
             type="text"
-            placeholder="输入房间代码"
+            className='input'
+            placeholder="Room Code"
             value={roomCode}
             onChange={(e) => setRoomCode(e.target.value)}
           />
-          <button onClick={handleCreateRoom}>创建房间</button>
-        </div>
-      )}
+          <button className="submit" onClick={handleCreateRoom}>Create Room!</button>
+          </div>
+      }
     </div>
   );
 };

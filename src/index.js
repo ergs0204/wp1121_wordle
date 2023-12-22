@@ -8,6 +8,7 @@ import Auth from "./components/Auth";
 import { AuthProvider } from "./context/AuthProvider";
 import Homepage from "./components/Homepage";
 import Statistic from "./components/Statistic";
+import Matchingroom from "./components/Matchingroom";
   
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -18,7 +19,7 @@ root.render(
                     <Route path="/" element={<Homepage />} />
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/singleplayer" element={<Singleplayer />} />
-                    <Route path="/multiplayer" element={<Multiplayer />} />
+                    <Route path="/multiplayer" element={<Matchingroom />} />
                     <Route path="/newSgame" element={<Navigate to="/singleplayer" />} />
                     <Route path="/newMgame" element={<Navigate to="/multiplayer" />} />
                     <Route path="/statistic" element={<Statistic />} />
