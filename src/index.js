@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import App from "./App";
+import Singleplayer from "./Singleplayer";
+import Multiplayer from "./Multiplayer";
 import reportWebVitals from "./reportWebVitals";
 import Auth from "./components/Auth";
 import { AuthProvider } from "./context/AuthProvider";
@@ -16,8 +17,8 @@ root.render(
                 <Routes>
                     <Route path="/" element={<Homepage />} />
                     <Route path="/auth" element={<Auth />} />
-                    <Route path="/singleplayer" element={<App />} />
-                    <Route path="/multiplayer" element={<App />} />
+                    <Route path="/singleplayer" element={<Singleplayer />} />
+                    <Route path="/multiplayer" element={<Multiplayer />} />
                     <Route path="/newSgame" element={<Navigate to="/singleplayer" />} />
                     <Route path="/newMgame" element={<Navigate to="/multiplayer" />} />
                     <Route path="/statistic" element={<Statistic />} />

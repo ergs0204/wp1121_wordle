@@ -4,7 +4,7 @@ import "./App.css";
 // import words from "./data/wordDb";
 import dictionary from "./data/dictionary";
 
-function App() {
+function Singleplayer() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
     const [beginTime, setBeginTime] = useState("");
@@ -22,9 +22,8 @@ function App() {
         console.log("solution", solution);
     }, []);
 
-    
     return (
-        <div className="App">
+        <div className="singleplayer">
             <div>
                 <button className="back" onClick={() => window.location.href="/"}>Home</button>
                 <h1 className="title">Wordle</h1>
@@ -34,4 +33,4 @@ function App() {
     );  
 }
 
-export default App;
+export default Singleplayer;
