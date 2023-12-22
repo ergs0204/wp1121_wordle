@@ -5,10 +5,10 @@ export default function Timer({showModal, setcostTime }){
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if(showModal)
-      setSeconds(seconds => seconds);
-      else
+      
+      if(!showModal) 
       setSeconds(seconds => seconds + 1);
+
     }, 1000);
     
     return () => clearInterval(interval);
