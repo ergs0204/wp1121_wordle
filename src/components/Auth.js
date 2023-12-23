@@ -7,9 +7,7 @@ import AuthContext from "../context/AuthProvider";
 import axios from "../api/axios";
 const LOGIN_URL = "http://localhost:8080/api/auth";
 
-
 export default function Auth() {
-
     const {setAuth} = useContext(AuthContext);
     const [action, setAction] = useState("Sign up");
     const userRef = useRef();
@@ -19,7 +17,7 @@ export default function Auth() {
     const [email, setEmail] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
-
+    
     useEffect(() => {
         userRef.current.focus();
     }, []);
