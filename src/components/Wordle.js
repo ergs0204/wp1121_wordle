@@ -1,12 +1,15 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import useWordle from "../hooks/useWordle";
 import Grid from "./Grid";
 import Modal from "./Modal";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
+
 import Keypad from "./Keypad";
 import letters from "../data/letters";
+import Timer from "./Timer";
 
-const Wordle = ({ words, solution }) => {
+const Wordle = ({ words, solution, beginTime }) => {
     const {
         currentGuess,
         setCurrentGuess,
@@ -21,7 +24,10 @@ const Wordle = ({ words, solution }) => {
     } = useWordle(words, solution);
 
     const [showModal, setShowModal] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
+
+    const [costTime, setcostTime] = useState("");
+    const [endTime, setEndTime] = useState("");
 
     useEffect(() => {
         window.addEventListener("keyup", handleKeyUp);
@@ -29,20 +35,27 @@ const Wordle = ({ words, solution }) => {
             setTimeout(() => setShowModal(true), 1500);
             window.removeEventListener("keyup", handleKeyUp);
         }
+        setEndTime(new Date().toLocaleTimeString());
         return () => window.removeEventListener("keyup", handleKeyUp);
     }, [handleKeyUp, isCorrect, turn]);
 
     const closeModal = () => {
         setShowModal(prev => !prev);
-        navigate("/newgame");
+        router.push('/newSgame');
     };
+    
+    
 
     return (
         <div className="main">
+            <Timer showModal={showModal} setcostTime={setcostTime} />
             {showModal && (
                 <Modal
                     isCorrect={isCorrect}
                     turn={turn}
+                    costTime={costTime}
+                    beginTime={beginTime}
+                    endTime={endTime}
                     solution={solution}
                     resetGame={resetGame}
                     closeModal={closeModal}

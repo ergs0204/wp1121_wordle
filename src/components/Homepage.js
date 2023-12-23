@@ -1,31 +1,19 @@
+"use client"
 import React from "react";
 import Footer from "./Footer";
-import {useState} from "react";
+import { useRouter } from 'next/navigation';
 
-export default function Homepage ({homepage, setHomepage}){
-
-    const handleSinglePlayer = () => {
-        setHomepage(false);
-    };
-    const handleMultiplayer = () => {
-        // setHomepage(false);
-    };
-    const handleStatistic = () => {
-        // setHomepage(false);
-    };
-    const handleLogout = () => {
-        // setHomepage(false);
-    };
+export default function Homepage() {
+    const router = useRouter();
 
     return (
         <div className="homepage">
-            <h1>Wordle</h1>
-            <button className="mode from-center" onClick={handleSinglePlayer}>single player</button>
-            <button className="mode from-center" onClick={handleMultiplayer}>multiplayer</button>
-            <button className="mode from-center" onClick={handleStatistic}>statistic</button>
-            <button className="mode from-center" onClick={handleLogout}>logout</button>
+            <h1 className="title">Wordle</h1>
+            <button className="mode from-center" onClick={() => router.push('/newSgame')}>single player</button>
+            <button className="mode from-center" onClick={() => router.push('/matchingroom')}>multiplayer</button>
+            <button className="mode from-center" onClick={() => router.push('/statistic')}>statistic</button>
+            <button className="mode from-center" onClick={() => router.push('/auth')}>logout</button>
             <Footer />
         </div>
     );
-};
-
+}
