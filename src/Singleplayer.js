@@ -8,6 +8,7 @@ function Singleplayer() {
     const [solution, setSolution] = useState();
     const [words, setWords] = useState([]);
     const [beginTime, setBeginTime] = useState("");
+    const mode = "singleplayer";
 
     useEffect(() => {
         const dictWords = Object.keys(dictionary).filter(
@@ -27,7 +28,7 @@ function Singleplayer() {
             <div>
                 <button className="back" onClick={() => window.location.href="/"}>Home</button>
                 <h1 className="title">Wordle</h1>
-                <Wordle solution={solution} words={words} beginTime={beginTime} />
+                <Wordle solution={solution} words={words} beginTime={beginTime} mode={mode}/>
             </div>
         </div>
     );  

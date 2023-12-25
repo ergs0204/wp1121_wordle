@@ -30,6 +30,7 @@ const Matchingroom = () => {
             setErrorMsg("Room code must be 5 characters!");
             return;
         };
+        window.location.href="/newMgame";
     }
 
     return (
@@ -45,7 +46,7 @@ const Matchingroom = () => {
                     <div>
                         <button className='create' onClick={handleCreateRoom}>Create!<span></span><span></span><span></span><span></span></button>
                         <h2>Your room code is:</h2>
-                        <h2 className="room-code">{roomCode}22222</h2>
+                        <h2 className="room-code">{roomCode}</h2>
                     </div>
                 }
                 {action==="join" && (<>

@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import Keypad from "./Keypad";
 import letters from "../data/letters";
 import Timer from "./Timer";
+import Setproblem from "./Setproblem";
 
-const Wordle = ({ words, solution, beginTime }) => {
+const Wordle = ({ words, solution, beginTime, mode }) => {
     const {
         currentGuess,
         setCurrentGuess,
@@ -44,6 +45,7 @@ const Wordle = ({ words, solution, beginTime }) => {
 
     return (
         <div className="main">
+            {mode === "multiplayer" && <Setproblem />}
             <Timer showModal={showModal} setcostTime={setcostTime} />
             {showModal && (
                 <Modal
