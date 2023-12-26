@@ -5,6 +5,7 @@ import password_icon from "../components/assets/password.png";
 import email_icon from "../components/assets/email.png";
 import AuthContext from "../context/AuthProvider";
 import axios from "../api/axios";
+import {useRouter} from "next/navigation";
 const LOGIN_URL = "http://localhost:8080/api/auth";
 
 export default function Auth() {
@@ -17,6 +18,7 @@ export default function Auth() {
     const [email, setEmail] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+    const router = useRouter();
     
     useEffect(() => {
         userRef.current.focus();
@@ -102,7 +104,7 @@ export default function Auth() {
             }
         }
         console.log(user, pwd, confirmPwd, email);
-        window.location.href = "/";
+        router.push("/");
     }
 
     return (

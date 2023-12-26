@@ -4,12 +4,14 @@ import Wordle from "@/components/Wordle";
 import "@/app/App.css";
 // import words from "./data/wordDb";
 import dictionary from "@/data/dictionary";
+import { useRouter } from "next/navigation";
 
 function SinglePlayer() {
     const [solution, setSolution] = useState<String>();
     const [words, setWords] = useState<String[]>([]);
     const [beginTime, setBeginTime] = useState("");
     const mode = "singleplayer";
+    const router = useRouter();
 
     useEffect(() => {
         const dictWords = Object.keys(dictionary).filter(
@@ -27,7 +29,7 @@ function SinglePlayer() {
     return (
         <div className="singleplayer">
             <div>
-                <button className="back" onClick={() => window.location.href="/"}>Home</button>
+                <button className="back" onClick={() => router.push("/")}>Home</button>
                 <h1 className="title">Wordle</h1>
                 <Wordle solution={solution} words={words} beginTime={beginTime} mode={mode}/>
             </div>

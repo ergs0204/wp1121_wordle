@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useWordle from "../hooks/useWordle";
 import Grid from "./Grid";
 import Modal from "./Modal";
-import { useNavigate } from "react-router-dom";
+import {useRouter} from "next/navigation";
 import Keypad from "./Keypad";
 import letters from "../data/letters";
 import Timer from "./Timer";
@@ -26,6 +26,7 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
     const navigate = useNavigate();
     const [costTime, setcostTime] = useState("");
     const [endTime, setEndTime] = useState("");
+    const router = useRouter();
 
     useEffect(() => {
         window.addEventListener("keyup", handleKeyUp);
@@ -39,7 +40,7 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
 
     const closeModal = () => {
         setShowModal(prev => !prev);
-        navigate("/newSgame");
+        router.push("/newSgame");
     };
     
 

@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
+import {useRouter} from 'next/navigation';
 // import io from 'socket.io-client';
 
 const MatchingRoom = () => {
@@ -8,6 +9,7 @@ const MatchingRoom = () => {
     const [action, setAction] = useState('create');
     const [errorMsg, setErrorMsg] = useState("");
     const errorRef = useRef<HTMLParagraphElement>(null);
+    const router = useRouter();
 
 
     useEffect(() => {
@@ -36,7 +38,7 @@ const MatchingRoom = () => {
 
     return (
     <div className='matching'>
-        <button className="back" onClick={() => window.location.href="/"}>Home</button>
+        <button className="back" onClick={() => router.push("/")}>Home</button>
         <h1 className="title">Matching Room</h1>
         <div className="submit-container">
                 <div className={action==="join"?"submit gray":"submit"} onClick={()=>{setAction("create")}}>Create Room</div>

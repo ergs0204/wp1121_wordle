@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Statistic ({setPage}){
+export default function Statistic (){
 
     return (
         <div className="statistic">

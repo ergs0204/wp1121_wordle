@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import dictionary from "./../data/dictionary";
+import { useRouter } from "next/navigation";
 
 export default function Modal({
     isCorrect,
@@ -12,6 +13,7 @@ export default function Modal({
     closeModal,
 }) {
     const [showDefn, setShowDefn] = useState(false);
+    const router = useRouter();
 
     let letters = solution.split("");
     const solutionBlock = (
@@ -64,7 +66,7 @@ export default function Modal({
                 <br />
                 <button
                     className="home"
-                    onClick={() => window.location.href = "/"}
+                    onClick={() => router.push("/")}
                 >
                     Home
                 </button>
