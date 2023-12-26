@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import user_icon from "../components/assets/person.png";
 import password_icon from "../components/assets/password.png";
 import email_icon from "../components/assets/email.png";
-import AuthContext from "../context/AuthProvider";
+import AuthContext from "../app/auth/AuthProvider";
 import axios from "../api/axios";
 import {useRouter} from "next/navigation";
 const LOGIN_URL = "http://localhost:8080/api/auth";

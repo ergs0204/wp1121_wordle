@@ -23,7 +23,6 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
     } = useWordle(words, solution);
 
     const [showModal, setShowModal] = useState(false);
-    const navigate = useNavigate();
     const [costTime, setcostTime] = useState("");
     const [endTime, setEndTime] = useState("");
     const router = useRouter();
