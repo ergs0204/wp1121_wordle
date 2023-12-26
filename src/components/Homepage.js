@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Homepage() {
     const router = useRouter();
-
+    console.log("");
     return (
         <div className="homepage">
             <h1 className="title">Wordle</h1>
