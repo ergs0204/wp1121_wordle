@@ -1,19 +1,19 @@
 "use client"
 import React, { useRef } from "react";
 import { useState, useEffect, useContext } from "react";
-import user_icon from "../components/assets/person.png";
-import password_icon from "../components/assets/password.png";
-import email_icon from "../components/assets/email.png";
-import AuthContext from "../components/context/AuthContext";
+// import user_icon from "../components/assets/person.png";
+// import password_icon from "../components/assets/password.png";
+// import email_icon from "../components/assets/email.png";
+import AuthContext from "./AuthProvider";
 import axios from "../api/axios";
 import {useRouter} from "next/navigation";
 const LOGIN_URL = "http://localhost:8080/api/auth";
 
 export default function Auth() {
-    const {setAuth} = useContext(AuthContext);
+    const setAuth = useContext(AuthContext);
     const [action, setAction] = useState("Sign up");
-    const userRef = useRef();
-    const errorRef = useRef();
+    const userRef = useRef<HTMLInputElement>(null);
+    const errorRef = useRef<HTMLParagraphElement>(null);
     const [user, setUser] = useState("");
     const [pwd, setPwd] = useState("");
     const [email, setEmail] = useState("");
@@ -22,15 +22,15 @@ export default function Auth() {
     const router = useRouter();
     
     useEffect(() => {
-        userRef.current.focus();
+        userRef.current?.focus();
     }, []);
 
     useEffect(() => {
         setErrorMsg("");
     }, [user, pwd, confirmPwd, email]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
+        
         if (user === "" || pwd === "" || (action === "Sign up" && confirmPwd === "")) {
             setErrorMsg("Username and password cannot be empty!");
             return;
@@ -48,61 +48,61 @@ export default function Auth() {
             return;
         }
         if (action === "Login") {
-            try {
-                const response = await axios.post(LOGIN_URL, 
-                    JSON.stringify({user, pwd}),
-                    {
-                        headers: {'Content-Type': 'application/json'},
-                        withCredentials: true
-                    }
-                );
-                console.log(JSON.stringify(response?.data));
-                // console.log(JSON.stringify(response));
-                const accessToken = response?.data?.accessToken;
-                const roles = response?.data?.roles;
-                setAuth({ user, pwd, roles, accessToken });
-            } catch (err) {
-                if(!err?.response){
-                    setErrorMsg("No response from server!");
-                }
-                else if(err.response.status === 400){
-                    setErrorMsg("Missing username or password!");
-                }
-                else if(err.response.status === 401){
-                    setErrorMsg("Unauthorized!");
-                }
-                else{
-                    setErrorMsg("Login Failed!");
-                }
-                errorRef.current.focus();
-            }
+            // try {
+            //     const response = await axios.post(LOGIN_URL, 
+            //         JSON.stringify({user, pwd}),
+            //         {
+            //             headers: {'Content-Type': 'application/json'},
+            //             withCredentials: true
+            //         }
+            //     );
+            //     console.log(JSON.stringify(response?.data));
+            //     // console.log(JSON.stringify(response));
+            //     const accessToken = response?.data?.accessToken;
+            //     const roles = response?.data?.roles;
+            //     setAuth({ user, pwd, roles, accessToken });
+            // } catch (err) {
+            //     if(!err?.response){
+            //         setErrorMsg("No response from server!");
+            //     }
+            //     else if(err.response.status === 400){
+            //         setErrorMsg("Missing username or password!");
+            //     }
+            //     else if(err.response.status === 401){
+            //         setErrorMsg("Unauthorized!");
+            //     }
+            //     else{
+            //         setErrorMsg("Login Failed!");
+            //     }
+            //     errorRef.current.focus();
+            // }
         }
         else if (action === "Sign up"){
-            try {
-                const response = await axios.post(LOGIN_URL + "/signup", 
-                    JSON.stringify({user, pwd, email}),
-                    {
-                        headers: {'Content-Type': 'application/json'},
-                        withCredentials: true
-                    }
-                );
-                console.log(JSON.stringify(response?.data));
-                // console.log(JSON.stringify(response));
-                const accessToken = response?.data?.accessToken;
-                const roles = response?.data?.roles;
-                setAuth({ user, pwd, email, roles, accessToken });
-            } catch (err) {
-                if(!err?.response){
-                    setErrorMsg("No response from server!");
-                }
-                else if(err.response.status === 400){
-                    setErrorMsg("Username already exists!");
-                }
-                else{
-                    setErrorMsg("Sign up Failed!");
-                }
-                errorRef.current.focus();
-            }
+            // try {
+            //     const response = await axios.post(LOGIN_URL + "/signup", 
+            //         JSON.stringify({user, pwd, email}),
+            //         {
+            //             headers: {'Content-Type': 'application/json'},
+            //             withCredentials: true
+            //         }
+            //     );
+            //     console.log(JSON.stringify(response?.data));
+            //     // console.log(JSON.stringify(response));
+            //     const accessToken = response?.data?.accessToken;
+            //     const roles = response?.data?.roles;
+            //     setAuth({ user, pwd, email, roles, accessToken });
+            // } catch (err) {
+            //     if(!err?.response){
+            //         setErrorMsg("No response from server!");
+            //     }
+            //     else if(err.response.status === 400){
+            //         setErrorMsg("Username already exists!");
+            //     }
+            //     else{
+            //         setErrorMsg("Sign up Failed!");
+            //     }
+            //     errorRef.current.focus();
+            // }
         }
         console.log(user, pwd, confirmPwd, email);
         router.push("/");
@@ -121,7 +121,7 @@ export default function Auth() {
             <p ref={errorRef} className={errorMsg?"error":"error hidden"} aria-live="assertive">{errorMsg}</p>
             <div className="inputs">
                 <div className="input">
-                    <img src={user_icon} alt="user icon" />
+                    <img src="../components/assets/person.png" alt="user icon" />
                     <input 
                         type="text" 
                         ref={userRef} 
@@ -132,7 +132,7 @@ export default function Auth() {
                     />
                 </div>
                 <div className="input">
-                    <img src={password_icon} alt="user icon" />
+                    <img src="../components/assets/password.png" alt="user icon" />
                     <input 
                         type="password" 
                         placeholder="Password" 
@@ -147,7 +147,7 @@ export default function Auth() {
                 :
                 <>
                 <div className="input">
-                    <img src={password_icon} alt="user icon" />
+                    <img src="../components/assets/password.png" alt="user icon" />
                     <input 
                         type="password" 
                         placeholder="Confirm Password" 
@@ -157,7 +157,7 @@ export default function Auth() {
                     />
                 </div>
                 <div className="input">
-                    <img src={email_icon} alt="user icon" />
+                    <img src="../components/assets/email.png" alt="user icon" />
                     <input 
                         type="email" 
                         placeholder="Email" 
