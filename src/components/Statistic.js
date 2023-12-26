@@ -9,3 +9,4 @@ export default function Statistic ({setPage}){
         </div>
     );
 };
+

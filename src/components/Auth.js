@@ -1,4 +1,3 @@
-"use client"
 import React, { useRef } from "react";
 import { useState, useEffect, useContext } from "react";
 import user_icon from "../components/assets/person.png";

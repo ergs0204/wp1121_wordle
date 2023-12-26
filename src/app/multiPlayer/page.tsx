@@ -9,6 +9,7 @@ function Multiplayer() {
     const [solution, setSolution] = useState<String>();
     const [words, setWords] = useState<String[]>([]);
     const [beginTime, setBeginTime] = useState("");
+    const mode = "multiplayer";
 
     useEffect(() => {
         const dictWords = Object.keys(dictionary).filter(
@@ -31,11 +32,11 @@ function Multiplayer() {
                 <div className="multizone">
                     <div className="self">
                         <a>YOU</a>
-                        <Wordle solution={solution} words={words} beginTime={beginTime} />
+                        <Wordle solution={solution} words={words} beginTime={beginTime} mode={mode}/>
                     </div>
                     <div className="opponent">
                         <a>OPPONENT</a>
-                        <Wordle solution={solution} words={words} beginTime={beginTime} />
+                        <Wordle solution={solution} words={words} beginTime={beginTime} mode={mode}/>
                     </div>
                 </div>
             </div>

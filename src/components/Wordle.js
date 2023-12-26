@@ -1,15 +1,14 @@
-"use client"
 import React, { useEffect, useState } from "react";
 import useWordle from "../hooks/useWordle";
 import Grid from "./Grid";
 import Modal from "./Modal";
-import { useRouter } from 'next/navigation';
-
+import { useNavigate } from "react-router-dom";
 import Keypad from "./Keypad";
 import letters from "../data/letters";
 import Timer from "./Timer";
+import Setproblem from "./Setproblem";
 
-const Wordle = ({ words, solution, beginTime }) => {
+const Wordle = ({ words, solution, beginTime, mode }) => {
     const {
         currentGuess,
         setCurrentGuess,
@@ -24,8 +23,7 @@ const Wordle = ({ words, solution, beginTime }) => {
     } = useWordle(words, solution);
 
     const [showModal, setShowModal] = useState(false);
-    const router = useRouter();
-
+    const navigate = useNavigate();
     const [costTime, setcostTime] = useState("");
     const [endTime, setEndTime] = useState("");
 
@@ -41,13 +39,13 @@ const Wordle = ({ words, solution, beginTime }) => {
 
     const closeModal = () => {
         setShowModal(prev => !prev);
-        router.push('/newSgame');
+        navigate("/newSgame");
     };
-    
     
 
     return (
         <div className="main">
+            {mode === "multiplayer" && <Setproblem />}
             <Timer showModal={showModal} setcostTime={setcostTime} />
             {showModal && (
                 <Modal

@@ -1,14 +1,12 @@
-"use client"
 import React, { useState, useRef, useEffect } from 'react';
 // import io from 'socket.io-client';
 
-const MatchingRoom = () => {
+const Matchingroom = () => {
     const [roomCode, setRoomCode] = useState('');
     const [socket, setSocket] = useState(null);
     const [action, setAction] = useState('create');
     const [errorMsg, setErrorMsg] = useState("");
-    const errorRef = useRef<HTMLParagraphElement>(null);
-
+    const errorRef = useRef();
 
     useEffect(() => {
         setErrorMsg("");
@@ -32,6 +30,7 @@ const MatchingRoom = () => {
             setErrorMsg("Room code must be 5 characters!");
             return;
         };
+        window.location.href="/newMgame";
     }
 
     return (
@@ -70,4 +69,4 @@ const MatchingRoom = () => {
     );
 };
 
-export default MatchingRoom;
+export default Matchingroom;
