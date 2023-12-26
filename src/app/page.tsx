@@ -12,18 +12,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/singleplayer" element={<Singleplayer />} />
-              <Route path="/multiplayer" element={<Multiplayer />} />
-              <Route path="/matchingroom" element={<Matchingroom />} />
-              <Route path="/newSgame" element={<Navigate to="/singleplayer" />} />
-              <Route path="/newMgame" element={<Navigate to="/multiplayer" />} />
-              <Route path="/statistic" element={<Statistic />} />
-          </Routes>
-        </BrowserRouter>
+        <Homepage />
       </AuthProvider>
     </main>
   );
