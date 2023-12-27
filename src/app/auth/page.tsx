@@ -5,7 +5,6 @@ import { useState, useEffect, useContext } from "react";
 // import password_icon from "../components/assets/password.png";
 // import email_icon from "../components/assets/email.png";
 import AuthContext from "./AuthProvider";
-import axios from "../api/axios";
 import {useRouter} from "next/navigation";
 const LOGIN_URL = "http://localhost:8080/api/auth";
 
