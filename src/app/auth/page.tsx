@@ -7,7 +7,7 @@ import AuthContext from "./AuthProvider";
 import { useRouter, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 
-export default async function Auth() {
+export default function Auth() {
     const setAuth = useContext(AuthContext);
     const [action, setAction] = useState<string>("Sign up");
     const userRef = useRef<HTMLInputElement>(null);
@@ -19,10 +19,10 @@ export default async function Auth() {
     const [errorMsg, setErrorMsg] = useState<string>("");
     const router = useRouter();
 
-    const session = await auth();
-    if (session?.user) {
-        redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
-    }
+    // const session = await auth();
+    // if (session?.user) {
+    //     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+    // }
     
     useEffect(() => {
         userRef.current?.focus();
@@ -57,8 +57,13 @@ export default async function Auth() {
             email: email,
             callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
         })
+        .then((res) => {
+            if (res && res.error) {
+                setErrorMsg(res.error);
+            }
+        });
+        
         console.log(user, pwd, confirmPwd, email);
-        // router.push("/");
     }
 
     return (
@@ -74,7 +79,7 @@ export default async function Auth() {
             <p ref={errorRef} className={errorMsg?"error":"error hidden"} aria-live="assertive">{errorMsg}</p>
             <div className="inputs">
                 <div className="input">
-                    <img src="../components/assets/person.png" alt="user icon" />
+                    <img src='/person.png' alt="user icon" />
                     <input 
                         type="text" 
                         ref={userRef} 
@@ -85,7 +90,7 @@ export default async function Auth() {
                     />
                 </div>
                 <div className="input">
-                    <img src="../components/assets/password.png" alt="user icon" />
+                    <img src="/password.png" alt="pwd icon" />
                     <input 
                         type="password" 
                         placeholder="Password" 
@@ -100,7 +105,7 @@ export default async function Auth() {
                 :
                 <>
                 <div className="input">
-                    <img src="../components/assets/password.png" alt="user icon" />
+                    <img src="/password.png" alt="pwd icon" />
                     <input 
                         type="password" 
                         placeholder="Confirm Password" 
@@ -110,7 +115,7 @@ export default async function Auth() {
                     />
                 </div>
                 <div className="input">
-                    <img src="../components/assets/email.png" alt="user icon" />
+                    <img src="/email.png" alt="email icon" />
                     <input 
                         type="email" 
                         placeholder="Email" 

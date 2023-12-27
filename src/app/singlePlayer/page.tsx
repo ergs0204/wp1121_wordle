@@ -17,6 +17,8 @@ function SinglePlayer() {
         const dictWords = Object.keys(dictionary).filter(
             dict => dict.length === 5
         );
+        // TODO: get random word from api
+        
         setWords(dictWords);
         const wordSize = dictWords.length;
         let wordIndex = Math.floor(Math.random() * wordSize);
