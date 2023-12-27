@@ -1,24 +1,28 @@
 "use client"
 import React, { useRef } from "react";
 import { useState, useEffect, useContext } from "react";
-// import user_icon from "../components/assets/person.png";
-// import password_icon from "../components/assets/password.png";
-// import email_icon from "../components/assets/email.png";
+import {signIn, useSession} from "next-auth/react";
+import { publicEnv } from "@/lib/env/public";
 import AuthContext from "./AuthProvider";
-import {useRouter} from "next/navigation";
-const LOGIN_URL = "http://localhost:8080/api/auth";
+import { useRouter, redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 
-export default function Auth() {
+export default async function Auth() {
     const setAuth = useContext(AuthContext);
-    const [action, setAction] = useState("Sign up");
+    const [action, setAction] = useState<string>("Sign up");
     const userRef = useRef<HTMLInputElement>(null);
     const errorRef = useRef<HTMLParagraphElement>(null);
-    const [user, setUser] = useState("");
-    const [pwd, setPwd] = useState("");
-    const [email, setEmail] = useState("");
-    const [confirmPwd, setConfirmPwd] = useState("");
-    const [errorMsg, setErrorMsg] = useState("");
+    const [user, setUser] = useState<string>("");
+    const [pwd, setPwd] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [confirmPwd, setConfirmPwd] = useState<string>("");
+    const [errorMsg, setErrorMsg] = useState<string>("");
     const router = useRouter();
+
+    const session = await auth();
+    if (session?.user) {
+        redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+    }
     
     useEffect(() => {
         userRef.current?.focus();
@@ -28,7 +32,8 @@ export default function Auth() {
         setErrorMsg("");
     }, [user, pwd, confirmPwd, email]);
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
+        e.preventDefault();
         
         if (user === "" || pwd === "" || (action === "Sign up" && confirmPwd === "")) {
             setErrorMsg("Username and password cannot be empty!");
@@ -46,65 +51,14 @@ export default function Auth() {
             setErrorMsg("Password must be at least 4 characters!");
             return;
         }
-        if (action === "Login") {
-            // try {
-            //     const response = await axios.post(LOGIN_URL, 
-            //         JSON.stringify({user, pwd}),
-            //         {
-            //             headers: {'Content-Type': 'application/json'},
-            //             withCredentials: true
-            //         }
-            //     );
-            //     console.log(JSON.stringify(response?.data));
-            //     // console.log(JSON.stringify(response));
-            //     const accessToken = response?.data?.accessToken;
-            //     const roles = response?.data?.roles;
-            //     setAuth({ user, pwd, roles, accessToken });
-            // } catch (err) {
-            //     if(!err?.response){
-            //         setErrorMsg("No response from server!");
-            //     }
-            //     else if(err.response.status === 400){
-            //         setErrorMsg("Missing username or password!");
-            //     }
-            //     else if(err.response.status === 401){
-            //         setErrorMsg("Unauthorized!");
-            //     }
-            //     else{
-            //         setErrorMsg("Login Failed!");
-            //     }
-            //     errorRef.current.focus();
-            // }
-        }
-        else if (action === "Sign up"){
-            // try {
-            //     const response = await axios.post(LOGIN_URL + "/signup", 
-            //         JSON.stringify({user, pwd, email}),
-            //         {
-            //             headers: {'Content-Type': 'application/json'},
-            //             withCredentials: true
-            //         }
-            //     );
-            //     console.log(JSON.stringify(response?.data));
-            //     // console.log(JSON.stringify(response));
-            //     const accessToken = response?.data?.accessToken;
-            //     const roles = response?.data?.roles;
-            //     setAuth({ user, pwd, email, roles, accessToken });
-            // } catch (err) {
-            //     if(!err?.response){
-            //         setErrorMsg("No response from server!");
-            //     }
-            //     else if(err.response.status === 400){
-            //         setErrorMsg("Username already exists!");
-            //     }
-            //     else{
-            //         setErrorMsg("Sign up Failed!");
-            //     }
-            //     errorRef.current.focus();
-            // }
-        }
+        signIn("credentials", {
+            username: user,
+            password: pwd,
+            email: email,
+            callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
+        })
         console.log(user, pwd, confirmPwd, email);
-        router.push("/");
+        // router.push("/");
     }
 
     return (
