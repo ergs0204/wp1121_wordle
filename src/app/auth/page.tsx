@@ -51,14 +51,15 @@ export default function Auth() {
             setErrorMsg("Password must be at least 4 characters!");
             return;
         }
-        
-        // signIn("credentials", {
-        //     username: user,
-        //     password: pwd,
-        //     email: email,
-        //     callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
-        // })
-        
+
+        const res = await signIn("credentials", {
+            username: user,
+            password: pwd,
+            email: email,
+            redirect: false,
+            // callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
+        })
+        console.log(res);
         console.log(user, pwd, confirmPwd, email);
     }
 

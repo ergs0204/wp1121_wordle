@@ -3,21 +3,22 @@ import React from "react";
 
 export default function Gamestat ({ user }){
 
-    const fetchScoreboard = async () => {
-        const scoreboard = await getScoreboard();
+    const fetchScoreboard = () => {
+        const scoreboard = getScoreboard();
         console.log(scoreboard);
+        {scoreboard.map((user, i) => {
+            return (
+                <div key={i} className="user">
+                    <div className="username">{user.username}</div>
+                    <div className="score">{user.score}</div>
+                </div>
+            );
+        })}
     }
 
     return (
         <div className="gamestat">
-            {scoreboard.map((user, i) => {
-                return (
-                    <div key={i} className="user">
-                        <div className="username">{user.username}</div>
-                        <div className="score">{user.score}</div>
-                    </div>
-                );
-            })}
+            
         </div>
     );
 };
