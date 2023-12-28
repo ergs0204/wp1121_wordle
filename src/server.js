@@ -96,6 +96,18 @@ io.on("connection", (socket) => {
     socket.to("playing"+roomCode).emit("get-problem", solution);
   });
 
+  socket.on("guess", (formattedGuess, roomCode, turn) => {
+    socket.to("playing"+roomCode).emit("get-guess", formattedGuess, turn);
+  });
+
+  socket.on("end-game", (isCorrect, turn, roomCode) => {
+    socket.to("playing"+roomCode).emit("opponent-end-game", isCorrect, turn);
+  });
+
+  socket.on("play-again", (roomCode) => {
+    socket.to("playing"+roomCode).emit("opponent-play-again");
+  });
+  
   socket.on("disconnect", () => {
     rooms.forEach((room, roomCode) => {
       if (room[socket.id]) {

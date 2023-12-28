@@ -62,6 +62,11 @@ export default CredentialsProvider({
     }
 
     // Sign in
+    if (!existedUser.hashedPassword) {
+      console.log("No password set for this user.");
+      return null;
+    }
+    
     const isValid = await bcrypt.compare(password, existedUser.hashedPassword);
     if (!isValid) {
       console.log("Wrong password. Try again.");

@@ -94,7 +94,6 @@ const MatchingRoom = () => {
       console.log("Socket not initialized");
     }
   };
-
   const generateRoomCode = () => {
     const length = 5;
     const characters = "0123456789";

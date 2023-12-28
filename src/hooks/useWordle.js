@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useSearchParams } from 'next/navigation';
+import SocketContext from "@/app/socket/SocketProvider";
 
 const useWordle = (words, solution) => {
     const [turn, setTurn] = useState(0);
@@ -9,6 +11,9 @@ const useWordle = (words, solution) => {
     const [usedKeys, setUsedKeys] = useState({}); //{a: "green", s: "yellow"}
     //error handling
     const [errorMsg, setErrorMsg] = useState("");
+    const searchParams = useSearchParams();
+    const roomCode = searchParams.get("roomCode");
+    const socket = useContext(SocketContext);
 
     const resetGame = () => {
         setTurn(0);
@@ -91,6 +96,10 @@ const useWordle = (words, solution) => {
         });
         setErrorMsg("");
         setCurrentGuess("");
+        
+        if(socket && roomCode){
+            socket.emit("guess", formattedGuess, roomCode, turn);
+        }
     };
 
     // handle keyup event & track current guess

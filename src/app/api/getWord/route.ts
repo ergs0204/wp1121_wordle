@@ -6,7 +6,6 @@ import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { wordCorpusRelationTable, wordsTable } from "@/db/schema";
-import type {} from "@/lib/types/type";
 
 export async function GET(req: NextRequest) {
   try {
