@@ -11,7 +11,7 @@ function SinglePlayer() {
     const [beginTime, setBeginTime] = useState("");
     const mode = "singleplayer";
     const router = useRouter();
-
+    // console.log("test")
     useEffect(() => {
 
         // TODO: get random word from api

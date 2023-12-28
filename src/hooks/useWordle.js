@@ -4,6 +4,7 @@ const useWordle = (words, solution) => {
     const [turn, setTurn] = useState(0);
     const [currentGuess, setCurrentGuess] = useState("");
     const [guesses, setGuesses] = useState([...Array(6)]); // [[{key: "a", color: "green"}, {key: "s", color:"grey"}]]
+    const [saveData, setSaveData] = useState([]);
     const [wordHistory, setWordHistory] = useState([]); //["words", "story"]
     const [isCorrect, setIsCorrect] = useState(false);
     const [usedKeys, setUsedKeys] = useState({}); //{a: "green", s: "yellow"}
@@ -15,6 +16,7 @@ const useWordle = (words, solution) => {
         setCurrentGuess("");
         setGuesses([...Array(6)]);
         setWordHistory([]);
+        setSaveData([]);
         setIsCorrect(false);
         setErrorMsg("");
     };
@@ -61,6 +63,7 @@ const useWordle = (words, solution) => {
         });
 
         setWordHistory(history => [...history, currentGuess]);
+        setSaveData(history => [...history, {word:currentGuess,timestamp:new Date(),turn:turn+1}]);
         setTurn(prevTurn => prevTurn + 1);
 
         setUsedKeys(prevUsedKeys => {
@@ -145,6 +148,7 @@ const useWordle = (words, solution) => {
         setErrorMsg,
         resetGame,
         usedKeys,
+        saveData,
     };
 };
 
