@@ -5,7 +5,7 @@ import {signIn, useSession} from "next-auth/react";
 import { publicEnv } from "@/lib/env/public";
 import AuthContext from "./AuthProvider";
 import { useRouter, redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { auth, GET, POST } from "@/lib/auth";
 
 export default function Auth() {
     const setAuth = useContext(AuthContext);
@@ -51,17 +51,13 @@ export default function Auth() {
             setErrorMsg("Password must be at least 4 characters!");
             return;
         }
-        signIn("credentials", {
-            username: user,
-            password: pwd,
-            email: email,
-            callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
-        })
-        .then((res) => {
-            if (res && res.error) {
-                setErrorMsg(res.error);
-            }
-        });
+        
+        // signIn("credentials", {
+        //     username: user,
+        //     password: pwd,
+        //     email: email,
+        //     callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
+        // })
         
         console.log(user, pwd, confirmPwd, email);
     }

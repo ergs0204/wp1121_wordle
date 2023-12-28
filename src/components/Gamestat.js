@@ -1,5 +1,5 @@
 import React from "react";
-import { getScoreboard } from "@/api/getScoreboard"
+// import { getScoreboard } from "../app/api/getScoreboard";
 
 export default function Gamestat ({ user }){
 
