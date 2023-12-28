@@ -1,8 +1,7 @@
 import { getFontDefinitionFromNetwork } from "next/dist/server/font-utils";
 import { NextResponse, type NextRequest } from "next/server";
 
-//import CryptoJS from "crypto-js";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, sql, inArray } from "drizzle-orm";
 
 import { db } from "@/db";
 import { wordCorpusRelationTable, wordsTable } from "@/db/schema";
@@ -28,6 +27,7 @@ export async function GET(req: NextRequest) {
       .where(eq(wordCorpusRelationTable.corpusId, corpusId))
       .orderBy(sql`RANDOM()`)
       .limit(1);
+    // console.log("id",randomWordId)
     const randomWord = await db
       .select({
         word: wordsTable.word,
@@ -35,10 +35,27 @@ export async function GET(req: NextRequest) {
       })
       .from(wordsTable)
       .where(eq(wordsTable.id, randomWordId[0].wordId));
+    console.log(randomWord)
+    const allWordsId = await db
+      .select({ wordId: wordCorpusRelationTable.wordId })
+      .from(wordCorpusRelationTable)
+      .where(eq(wordCorpusRelationTable.corpusId, corpusId));
+    const ids = allWordsId.map((x) => x.wordId);
+    // console.log(ids)
+    const allWords = await db
+      .select({
+        word: wordsTable.word,
+      })
+      .from(wordsTable)
+      .where(inArray(wordsTable.id, ids));
+    const words = allWords.map((x) => x.word);
+    // console.log(allWords)
     return NextResponse.json({
       word: randomWord[0].word,
       definition: randomWord[0].definition,
+      allWords: words,
     });
+
   } catch (error) {
     return NextResponse.json(
       {

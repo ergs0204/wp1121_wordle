@@ -21,6 +21,7 @@ const gameInfoSchema = z.object({
 export async function POST(req: NextRequest) {
   const gameInfo = await req.json();
   try {
+    console.log(gameInfo)
     gameInfoSchema.parse(gameInfo);
   } catch (error) {
     console.log(error);

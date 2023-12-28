@@ -20,6 +20,7 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
         setErrorMsg,
         resetGame,
         usedKeys,
+        wordHistory,
     } = useWordle(words, solution);
 
     const [showModal, setShowModal] = useState(false);
@@ -41,7 +42,9 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
     const saveGameResult = async () => {
         try {
             // Make an API call to your backend server to save the game result
-            const response = await fetch("/api/saveGameResult", {
+            console.log("history",wordHistory)
+            
+            const response = await fetch("/api/finishGame", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -49,9 +52,17 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
                 body: JSON.stringify({
                     // Pass the necessary data to save the game result
                     // For example, you can pass the solution, turn, costTime, etc.
-                    solution,
-                    turn,
-                    costTime,
+                    // TODO: userid / session
+                    userId: 1,
+                    word: solution,
+                    corpusId: 1,
+                    startTime: beginTime,
+                    endTime: endTime,
+                    // guesses: {
+                    //   word: z.string().min(1).max(50),
+                    //   timestamp: z.string().transform((str) => new Date(str)),
+                    //   turn: z.number().min(1).max(10),
+                    // }.array(),
                 }),
             });
             if (response.ok) {

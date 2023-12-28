@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Wordle from "@/components/Wordle";
 import "@/app/App.css";
-// import words from "./data/wordDb";
 import dictionary from "@/data/dictionary";
 import { useRouter } from "next/navigation";
 
@@ -14,11 +13,23 @@ function SinglePlayer() {
     const router = useRouter();
 
     useEffect(() => {
+
+        // TODO: get random word from api
+        // fetch('/api/getWord?corpusId=1')
+        //     .then(response => response.json())
+        //     .then((data) => {
+        //         setSolution(data.solution);
+        //         const solution=data.solution
+        //         console.log("solution in fetch", solution);
+        //         setWords(data.allWords);
+        //         const words=data.allWords
+        //         console.log("solution", data.solution);
+        //     })
+        //     .catch(error => console.error(error));
+        
         const dictWords = Object.keys(dictionary).filter(
             dict => dict.length === 5
         );
-        // TODO: get random word from api
-        
         setWords(dictWords);
         const wordSize = dictWords.length;
         let wordIndex = Math.floor(Math.random() * wordSize);
