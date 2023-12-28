@@ -33,8 +33,8 @@ for file_path in os.listdir(path):
         res.append(file_path)
 
 for file in res:
-    f = open(path+"/"+file)
-    words = json.load(f)
+    with open(path+"/"+file) as f:
+        words = json.load(f)
     corpusname=file[:-5]
     print("Working on corpus : {}".format(corpusname))
     cur.execute("SELECT id FROM corpus WHERE corpus_name = '{}';".format(corpusname))
