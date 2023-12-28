@@ -35,15 +35,16 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
             window.removeEventListener("keyup", handleKeyUp);
             saveGameResult(); // Call the function to save the game result
         }
-        setEndTime(new Date().toLocaleTimeString());
+        setEndTime(new Date().toLocaleString());
         return () => window.removeEventListener("keyup", handleKeyUp);
     }, [handleKeyUp, isCorrect, turn]);
-
     const saveGameResult = async () => {
         try {
+            // console.log(new Date(beginTime) );
+
             // Make an API call to your backend server to save the game result
             // console.log("data",saveData);
-            console.log("starttime",beginTime.getTime())
+            // console.log("starttime",beginTime.getTime());
             const response = await fetch("/api/finishGame", {
                 method: "POST",
                 headers: {
@@ -56,9 +57,8 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
                     userId: "1",
                     word: solution,
                     corpusId: 1,
-                    startTime: beginTime.getTime(),
-                    // endTime: endTime.getTime(),
-                    endTime:1,
+                    startTime: beginTime,
+                    endTime: endTime,
                     guesses: saveData,
                 }),
             });
