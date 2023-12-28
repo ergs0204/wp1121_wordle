@@ -1,5 +1,5 @@
 import React from "react";
-
+import { SocketProvider } from "@/app/socket/SocketProvider";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
@@ -21,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
+        <SocketProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </SocketProvider>
       </body>
     </html>
   );

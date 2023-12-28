@@ -1,9 +1,9 @@
 "use client"
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import { useRouter } from 'next/navigation';
-
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
+import SocketContext from "@/app/socket/SocketProvider";
+// const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
 interface Player {
   id: string;
   ready: boolean;
@@ -11,7 +11,7 @@ interface Player {
 
 const MatchingRoom = () => {
   const [roomCode, setRoomCode] = useState("");
-  const [socket, setSocket] = useState<Socket | null>(null);
+  // const [socket, setSocket] = useState<Socket | null>(null);
   const [action, setAction] = useState("create");
   const [errorMsg, setErrorMsg] = useState("");
   const [playersInRoom, setPlayersInRoom] = useState<Player[]>([]);
@@ -19,19 +19,19 @@ const MatchingRoom = () => {
   const [isReady, setIsReady] = useState(false);
   const errorRef = useRef<HTMLParagraphElement>(null);
   const router = useRouter();
-
+  const socket = useContext(SocketContext);
   useEffect(() => {
     setErrorMsg("");
   }, [roomCode]);
 
-  useEffect(() => {
-    const newSocket = io(SOCKET_URL);
-    setSocket(newSocket);
+  // useEffect(() => {
+  //   const newSocket = io(SOCKET_URL);
+  //   setSocket(newSocket);
 
-    return () => {
-      newSocket.close();
-    };
-  }, []);
+  //   return () => {
+  //     newSocket.close();
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (socket) {
@@ -55,10 +55,19 @@ const MatchingRoom = () => {
       });
 
       socket.on("start-game", () => {
-        router.push('/multiPlayer');
+        router.push(`/multiPlayer?roomCode=${roomCode}`);
+        
       });
     }
   }, [socket, isInRoom]);
+
+  useEffect(() => {
+    return () => {
+      if (socket) {
+        socket.emit("leave-room", roomCode);
+      }
+    };
+  }, []);
 
   const handleCreateRoom = () => {
     const newRoomCode = generateRoomCode();
@@ -136,7 +145,7 @@ const MatchingRoom = () => {
             {action === "create" && (
               <div>
                 <button className="create" onClick={handleCreateRoom}>
-                  Create!<span></span><span></span><span></span><span></span>
+                  Create!
                 </button>
               </div>
             )}
@@ -151,7 +160,7 @@ const MatchingRoom = () => {
                     required
                   />
                   <button className="join" onClick={handleJoinRoom}>
-                    Join!<span></span><span></span><span></span><span></span>
+                    Join!
                   </button>
                 </div>
                 <p ref={errorRef} className={errorMsg ? "error" : "error hidden"} aria-live="assertive">

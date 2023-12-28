@@ -64,6 +64,9 @@ io.on("connection", (socket) => {
       const allReady = Object.values(room).every(player => player.ready);
       if (allReady && Object.keys(room).length === 2) {
         io.to(roomCode).emit("start-game");
+        Object.keys(room).forEach(playerId => {
+          io.sockets.sockets.get(playerId)?.join("playing" + roomCode);
+        });
       }
     }
   });
@@ -74,6 +77,23 @@ io.on("connection", (socket) => {
       room[socket.id].ready = false;
       updatePlayers(roomCode);
     }
+  });
+  socket.on("leave-room", (roomCode) => {
+    socket.leave(roomCode);
+    rooms.forEach((room, roomCode) => {
+      if (room[socket.id]) {
+        delete room[socket.id];
+        if (Object.keys(room).length === 0) {
+          rooms.delete(roomCode);
+        } else {
+          updatePlayers(roomCode);
+        }
+      }
+    });
+  });
+
+  socket.on("set-problem", (solution, roomCode) => {
+    socket.to("playing"+roomCode).emit("get-problem", solution);
   });
 
   socket.on("disconnect", () => {
