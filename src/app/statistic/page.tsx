@@ -7,7 +7,7 @@ export default function Statistic (){
     const router = useRouter();
 
     // TODO: get personal statistic from api
-
+    const user = "user";
     
 
     return (
@@ -17,7 +17,7 @@ export default function Statistic (){
             <p>Player: user</p>
             <div>
                 <h2>Single Player</h2>
-                <Gamestat />
+                <Gamestat user={user}/>
             </div>
         </div>
     );
