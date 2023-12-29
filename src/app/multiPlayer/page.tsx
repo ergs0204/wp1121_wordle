@@ -29,6 +29,7 @@ function Multiplayer() {
     return (
         <div className="multiplayer">
             <div>
+                
                 <button className="back" onClick={() => router.push("/")}>Home</button>
                 <h1 className="title">Wordle</h1>
                 <div className="multizone">

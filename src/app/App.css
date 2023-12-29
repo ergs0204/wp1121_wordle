@@ -968,9 +968,11 @@ h2 {
     transition-delay: 0s, 0.25s, 0s;
 }
 .set-problem {
-    background: rgba(190, 203, 240, 0.85);
+    background: rgba(190, 203, 240, 0.75);
     display: flex;
     position: fixed;
+    justify-content: center;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     top: 0;
@@ -1016,6 +1018,20 @@ h2 {
 
 .set-problem p {
     margin: 15px auto;
+}
+
+.set-problem .solution-input {
+    width: 400px;
+    height: 50px;
+    background: transparent;
+    border: solid 1px #ffffff;
+    margin: 3%;
+    outline: none;
+    font-size: 19px;
+    color: #1d1d1d;
+}
+.set-problem .hidden {
+    display: none;
 }
 
 .set-problem .solution {

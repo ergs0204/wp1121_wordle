@@ -20,6 +20,8 @@ const MatchingRoom = () => {
         // const newSocket = io('http://localhost:5000'); 
         // newSocket.emit('create-room', roomCode);
         // setSocket(newSocket);
+        // router.push(`/matchingRoom/${roomCode}`);
+        router.push('/multiPlayer')
     };
 
     const handleJoinRoom = () => {

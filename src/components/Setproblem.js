@@ -35,6 +35,7 @@ export default function Setproblem() {
             <h2>Set Problem</h2>
             <h3>Enter your problem:</h3>
             <textarea
+                className="solution-input"
                 placeholder="Enter your problem here..."
                 onChange={(e) => setSolution(e.target.value)}
                 value={solution}
