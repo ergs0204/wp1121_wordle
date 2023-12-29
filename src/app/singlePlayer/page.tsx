@@ -31,7 +31,7 @@ function SinglePlayer() {
         let wordIndex = Math.floor(Math.random() * wordSize);
         const solution = dictWords[wordIndex];
         setSolution(solution);
-        setBeginTime(new Date().toLocaleTimeString());
+        setBeginTime(new Date().toLocaleString());
         console.log("solution", solution);
     }, []);
 

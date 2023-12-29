@@ -1,12 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { auth } from "@/lib/auth";
 import { z } from "zod";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { gamesTable, guessesTable, scoresTable, wordsTable } from "@/db/schema";
 import type { GameInfo, Guess } from "@/lib/types/type";
 
+
 const gameInfoSchema = z.object({
-  userId: z.string(),
+  // userId: z.string(),
   word: z.string().min(1).max(50),
   corpusId: z.number(),
   startTime: z.string().transform((str) => new Date(str)),
@@ -19,6 +21,11 @@ const gameInfoSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session || !session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const userId = session.user.id;
   const gameInfo = await req.json();
   try {
     console.log("--------------------------------------")
@@ -49,7 +56,7 @@ export async function POST(req: NextRequest) {
     .from(secretTable)
     .where(and(
       eq(secretTable.word, gameInfo.word),
-      eq(secretTable.userId,gameInfo.userId),
+      eq(secretTable.userId,userId),
       eq(secretTable.gameId,gameInfo.gameId)
       ))
     .execute();
@@ -59,11 +66,10 @@ export async function POST(req: NextRequest) {
     */
     
     const wordId = wordRecord[0].id;
-    // console.log(gameInfo);
     const insertedGame = await db
       .insert(gamesTable)
       .values({
-        userId: gameInfo.userId,
+        userId: userId,
         wordId: wordId,
         corpusId: gameInfo.corpusId,
         startTime: new Date(gameInfo.startTime),
@@ -88,30 +94,38 @@ export async function POST(req: NextRequest) {
         .insert(guessesTable)
         .values({
           gameId: insertedGame[0].id,
-          userId: gameInfo.userId,
+          userId: userId,
           wordId: guessWordId,
           timestamp: new Date(guess.timestamp),
           turn: guess.turn,
         })
         .execute();
     }
+
     const currentScoreRecord = await db
-    .select({
-      score: scoresTable.score,
-    })
-    .from(scoresTable)
-    .where(eq(scoresTable.userId, gameInfo.userId))
-    .execute();
-
-  const currentScore = currentScoreRecord[0].score ? currentScoreRecord[0].score : 0;
-    await db
-      .update(scoresTable)
-      .set({
-        score: currentScore + 1,
-      })
-      .where(eq(scoresTable.userId, gameInfo.userId))
+      .select()
+      .from(scoresTable)
+      .where(eq(scoresTable.userId, userId))
       .execute();
-
+    
+    console.log("score",currentScoreRecord );
+    if (!currentScoreRecord){
+      await db
+        .insert(scoresTable)
+        .values({
+          userId:userId,
+          "score":1,
+        });
+    }else{
+      const currentScore = currentScoreRecord[0].score
+      await db
+        .update(scoresTable)
+        .set({
+          score: currentScore + 1,
+        })
+        .where(eq(scoresTable.userId, userId))
+        .execute();
+    }
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
     console.log(error);

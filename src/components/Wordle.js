@@ -43,7 +43,7 @@ const Wordle = ({ words, solution, beginTime, setIsPlayAgain}) => {
             window.removeEventListener("keyup", handleKeyUp);
             saveGameResult();
         }
-        setEndTime(new Date().toLocaleTimeString());
+        setEndTime(new Date().toLocaleString());
         return () => window.removeEventListener("keyup", handleKeyUp);
     }, [handleKeyUp, isCorrect, turn]);
 
@@ -75,7 +75,7 @@ const Wordle = ({ words, solution, beginTime, setIsPlayAgain}) => {
                     // Pass the necessary data to save the game result
                     // For example, you can pass the solution, turn, costTime, etc.
                     // TODO: userid / session
-                    userId: "1",
+                    // userId: "1",
                     word: solution,
                     corpusId: 1,
                     startTime: beginTime,
