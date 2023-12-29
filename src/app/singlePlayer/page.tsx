@@ -18,12 +18,12 @@ function SinglePlayer() {
         // fetch('/api/getWord?corpusId=1')
         //     .then(response => response.json())
         //     .then((data) => {
-        //         setSolution(data.solution);
-        //         const solution=data.solution
+        //         setSolution(data.word);
+        //         const solution=data.word
         //         console.log("solution in fetch", solution);
         //         setWords(data.allWords);
         //         const words=data.allWords
-        //         console.log("solution", data.solution);
+        //         console.log("solution", data.word);
         //     })
         //     .catch(error => console.error(error));
         
