@@ -16,21 +16,21 @@ function SinglePlayer() {
         fetch('/api/getWord?corpusId=1')
             .then(response => response.json())
             .then((data) => {
-                setSolution(data.solution);
-                const solution = data.solution
+                setSolution(data.word);
+                const solution = data.word
                 console.log("solution in fetch", solution);
                 setWords(data.allWords);
-                console.log("solution", data.solution);
+                console.log("allWords", data.allWords);
             })
             .catch(error => console.error(error));
-        const dictWords = Object.keys(dictionary).filter(
-            dict => dict.length === 5
-        );
-        setWords(dictWords);
-        const wordSize = dictWords.length;
-        let wordIndex = Math.floor(Math.random() * wordSize);
-        const solution = dictWords[wordIndex];
-        setSolution(solution);
+        // const dictWords = Object.keys(dictionary).filter(
+        //     dict => dict.length === 5
+        // );
+        // setWords(dictWords);
+        // const wordSize = dictWords.length;
+        // let wordIndex = Math.floor(Math.random() * wordSize);
+        // const solution = dictWords[wordIndex];
+        // setSolution(solution);
         setBeginTime(new Date().toLocaleString());
         console.log("solution", solution);
     }, []);

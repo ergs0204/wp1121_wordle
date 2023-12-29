@@ -109,23 +109,29 @@ export async function POST(req: NextRequest) {
       .execute();
     
     console.log("score",currentScoreRecord );
-    if (!currentScoreRecord){
+    console.log("!score",!currentScoreRecord.length );
+    if (!currentScoreRecord.length){
+      console.log("adding user to score table")
       await db
         .insert(scoresTable)
         .values({
           userId:userId,
-          "score":1,
         });
+      const currentScore = 0;
+      console.log("currentScore in add",currentScore)
     }else{
-      const currentScore = currentScoreRecord[0].score
-      await db
+      const currentScore = currentScoreRecord[0].score;
+      console.log("currentScore in alr",currentScore)
+    }
+    // TODO : currentScore not define (above is ok)
+    console.log("currentScore",currentScore)
+    await db
         .update(scoresTable)
         .set({
           score: currentScore + 1,
         })
         .where(eq(scoresTable.userId, userId))
         .execute();
-    }
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
     console.log(error);

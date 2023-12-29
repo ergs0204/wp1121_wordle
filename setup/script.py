@@ -24,7 +24,9 @@ def reset_table(tb):
     conn.commit()
     print(f"Done reset {tb}")
 
-def addscore(user)
+def addscore(user):
+    cur.execute("INSERT INTO scores( userscore) VALUES('{}') RETURNING id;".format(corpusname))
+    conn.commit()
 
 
 # connect to db
@@ -35,7 +37,7 @@ conn = psycopg2.connect(database = "wordle",
                         port = 5432)
 cur = conn.cursor()
 
-# resetcorpus(conn,cur)
-# reset_table(conn,cur,"users")
-show_table(conn,cur,"users")
-show_table(conn,cur,"scores")
+# resetcorpus()
+reset_table("scores")
+show_table("users")
+show_table("scores")
