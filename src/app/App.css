@@ -149,8 +149,18 @@ h2 {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 19px;
+    font-size: 29px;
+    font-weight: 700;
+    padding-left: 5%;
     color: #1d1d1d;
+}
+.matching .input input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 .matching .create {
     display: inline-block;
@@ -674,8 +684,16 @@ h2 {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 19px;
+    font-size: 24px;
     color: #1d1d1d;
+}
+.auth .input input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding-left: 1%;
 }
 
 .auth .forgot-password {
@@ -1024,16 +1042,24 @@ h2 {
     width: 400px;
     height: 50px;
     background: transparent;
-    border: solid 1px #ffffff;
+    border: solid 2px #ffffff;
     margin: 3%;
     outline: none;
-    font-size: 19px;
+    font-size: 29px;
     color: #1d1d1d;
+}
+.set-problem .solution-input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+    font-size: 19px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
 }
 .set-problem .hidden {
     display: none;
 }
-
 .set-problem .solution {
     color: #ff004c;
     font-weight: bold;
@@ -1043,36 +1069,6 @@ h2 {
     text-align: center;
     margin: 30px 0 10px;
 }
-
-.set-problem .current {
-    justify-content: center;
-    margin: 30px auto;
-}
-
-.set-problem .current > div {
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-}
-
-.set-problem .meaning {
-    display: none;
-    transition: all;
-    transition-duration: 200ms;
-}
-.set-problem .meaning.show {
-    display: block;
-    padding: 0;
-}
-.set-problem p.definition {
-    font-size: 14px;
-    text-transform: capitalize;
-    line-height: 1.2;
-    font-weight: 300;
-    margin: 10px auto auto;
-    color: rgba(85, 85, 85, 0.867);
-}
-
 .set-problem button,
 .set-problem button:focus {
     position: relative;
