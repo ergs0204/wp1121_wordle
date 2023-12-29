@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useRef, useEffect, useContext } from "react";
-import io, { Socket } from "socket.io-client";
 import { useRouter } from 'next/navigation';
 import SocketContext from "@/app/socket/SocketProvider";
 // const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";

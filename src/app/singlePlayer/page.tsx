@@ -4,13 +4,26 @@ import Wordle from "@/components/Wordle";
 import "@/app/App.css";
 // import words from "./data/wordDb";
 import dictionary from "@/data/dictionary";
+import { useRouter } from "next/navigation";
 
 function SinglePlayer() {
     const [solution, setSolution] = useState<String>();
     const [words, setWords] = useState<String[]>([]);
     const [beginTime, setBeginTime] = useState("");
-
+    const router = useRouter();
     useEffect(() => {
+        // TODO: get random word from api
+        // fetch('/api/getWord?corpusId=1')
+        //     .then(response => response.json())
+        //     .then((data) => {
+        //         setSolution(data.solution);
+        //         const solution=data.solution
+        //         console.log("solution in fetch", solution);
+        //         setWords(data.allWords);
+        //         const words=data.allWords
+        //         console.log("solution", data.solution);
+        //     })
+        //     .catch(error => console.error(error));
         const dictWords = Object.keys(dictionary).filter(
             dict => dict.length === 5
         );
@@ -26,7 +39,7 @@ function SinglePlayer() {
     return (
         <div className="singleplayer">
             <div>
-                <button className="back" onClick={() => window.location.href="/"}>Home</button>
+                <button className="back" onClick={() => router.push("/")}>Home</button>
                 <h1 className="title">Wordle</h1>
                 <Wordle solution={solution} words={words} beginTime={beginTime} setIsPlayAgain={()=>{}} />
             </div>

@@ -30,11 +30,16 @@
    cd setup
    python3 loadcorpus.py
    ```
-6. Start the development server
+6. Start the socket.io server
+   ```bash
+   cd src
+   node server.js
+   ```
+7. Start the development server
    ```bash
    yarn dev
    ```
-7. Open http://localhost:3000 in your browser
+8. Open http://localhost:3000 in your browser
 
 # Setup Guide
 

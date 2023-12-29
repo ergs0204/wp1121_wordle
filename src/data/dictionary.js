@@ -36328,6 +36328,7 @@ const dictionary = {
     timid: "Wanting courage to meet danger; easily frightened; timorous;not bold; fearful; shy.Poor is the triumph o'er the timid hare. Thomson.",
     timidity: "The quality or state of being timid; timorousness; timidness.",
     timocratic: "Belonging to, or constituted by, timocracy. Sir G. C. Lewis.",
+    timmy: "A young sheep; a lamb.",
     tin: "An elementary substance found as an oxide in the mineralcassiterite, and reduced as a soft white crystalline metal, malleableat ordinary temperatures, but brittle when heated. It is not easilyoxidized in the air, and is used chiefly to coat iron to protect itfrom rusting, in the form of tin foil with mercury to form thereflective surface of mirrors, and in solder, bronze, speculum metal,and other alloys. Its compounds are designated as stannous, orstannic. Symbol Sn (Stannum). Atomic weight 117.4.",
     tinct: "Tined; tinged. [Archaic] Spenser.",
     tincture: "One of the metals, colors, or furs used in armory.",

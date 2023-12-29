@@ -10,4 +10,4 @@ export const privateEnv: PrivateEnv = {
   POSTGRES_URL: process.env.POSTGRES_URL!,
 };
 
-privateEnvSchema.parse(privateEnv);
+// privateEnvSchema.parse(privateEnv);

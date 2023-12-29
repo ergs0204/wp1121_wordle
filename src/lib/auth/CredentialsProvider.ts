@@ -10,7 +10,7 @@ import { authSchema } from "@/validators/auth";
 export default CredentialsProvider({
   name: "credentials",
   credentials: {
-    email: { label: "Email", type: "text" },
+    email: { label: "Email", type: "email" },
     username: { label: "Userame", type: "text", optional: true },
     password: { label: "Password", type: "password" },
   },
@@ -60,13 +60,11 @@ export default CredentialsProvider({
         id: createdUser.displayId,
       };
     }
-
-    // Sign in
     if (!existedUser.hashedPassword) {
       console.log("No password set for this user.");
       return null;
     }
-    
+    // Login
     const isValid = await bcrypt.compare(password, existedUser.hashedPassword);
     if (!isValid) {
       console.log("Wrong password. Try again.");

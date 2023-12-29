@@ -22,6 +22,7 @@ const Wordle = ({ words, solution, beginTime, setIsPlayAgain}) => {
         setErrorMsg,
         resetGame,
         usedKeys,
+        saveData,
     } = useWordle(words, solution);
 
     const [showModal, setShowModal] = useState(false);
@@ -40,6 +41,7 @@ const Wordle = ({ words, solution, beginTime, setIsPlayAgain}) => {
             socket.emit("end-game", isCorrect, turn, roomCode);
             setTimeout(() => setShowModal(true), 1500);
             window.removeEventListener("keyup", handleKeyUp);
+            saveGameResult();
         }
         setEndTime(new Date().toLocaleTimeString());
         return () => window.removeEventListener("keyup", handleKeyUp);
@@ -56,7 +58,40 @@ const Wordle = ({ words, solution, beginTime, setIsPlayAgain}) => {
             });
         }
     }, [socket]);
+    
+    const saveGameResult = async () => {
+        try {
+            // console.log(new Date(beginTime) );
 
+            // Make an API call to your backend server to save the game result
+            // console.log("data",saveData);
+            // console.log("starttime",beginTime.getTime());
+            const response = await fetch("/api/finishGame", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // Pass the necessary data to save the game result
+                    // For example, you can pass the solution, turn, costTime, etc.
+                    // TODO: userid / session
+                    userId: "1",
+                    word: solution,
+                    corpusId: 1,
+                    startTime: beginTime,
+                    endTime: endTime,
+                    guesses: saveData,
+                }),
+            });
+            if (response.ok) {
+                console.log("Game result saved successfully!");
+            } else {
+                console.error("Failed to save game result");
+            }
+        } catch (error) {
+            console.error("An error occurred while saving the game result", error);
+        }
+    };
     const closeModal = () => {
         setShowModal(prev => !prev);
         if (!roomCode) {

@@ -14,7 +14,7 @@ def deletecorpus(conn,cur):
 
 
 # connect to db
-conn = psycopg2.connect(database = "wordle-clone", 
+conn = psycopg2.connect(database = "wordle", 
                         user = "postgres", 
                         host= 'localhost',
                         password = "postgres",
@@ -36,7 +36,7 @@ for file in res:
     f = open(path+"/"+file)
     words = json.load(f)
     corpusname=file[:-5]
-    print("Wording on corpus : {}".format(corpusname))
+    print("Working on corpus : {}".format(corpusname))
     cur.execute("SELECT id FROM corpus WHERE corpus_name = '{}';".format(corpusname))
     corpus_id=cur.fetchall()
     if (not len(corpus_id)):
@@ -48,7 +48,7 @@ for file in res:
         cur.execute("SELECT id FROM words WHERE word = '{}';".format(word))
         word_id=cur.fetchall()
         if (not len(word_id)):
-            cur.execute("INSERT INTO words( word) VALUES('{}') RETURNING id;".format(word))
+            cur.execute("INSERT INTO words( word,definition) VALUES('{}','{}') RETURNING id;".format(word,words[word]))
             conn.commit()
             word_id=cur.fetchall()
         word_id=word_id[0][0]
@@ -69,24 +69,3 @@ for file in res:
         conn.commit()
 
 print("Finish loading corpus")
-    # conn.commit()
-    # for j in words:
-    #     if ()
-    # rows = cur.fetchall()
-    # print(rows)
-
-
-# 
-
-# cur = conn.cursor()
-# cur.execute("INSERT INTO corpus( corpus_name) VALUES('test')");
-
-
-# rows = cur.fetchall()
-# cur.execute("SELECT * FROM corpus;")
-# rows = cur.fetchall()
-# print(rows)
-# conn.commit()
-
-# cur.close()
-# conn.close()

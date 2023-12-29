@@ -10,6 +10,9 @@ export default function Modal({
     isOpponentEnd,
     solution,
     turn,
+    costTime,
+    beginTime,
+    endTime,
     resetGame,
     closeModal,
     setIsPlayAgain,
@@ -42,11 +45,6 @@ export default function Modal({
             closeModal();
         }
         
-    };
-
-    const goHome = () => {
-        resetGame();
-        router.push('/');
     };
 
     return (
@@ -82,6 +80,9 @@ export default function Modal({
                         <p>Your opponent has used up their turns!</p>
                     </>
                 )}
+                <p className="time">Your time: {costTime}</p>
+                <p className="time">Start time: {beginTime}</p>
+                <p className="time">End time: {endTime}</p>
                 <p className="solution">THE SOLUTION IS: </p>
                 {solutionBlock}
                 <button className="reset" onClick={newGame}>
@@ -93,7 +94,10 @@ export default function Modal({
                 >
                     What does it mean?
                 </button>
-                <button className="reset" onClick={goHome}>
+                <button
+                    className="home"
+                    onClick={() => router.push("/")}
+                >
                     Home
                 </button>
                 <div className={`meaning ${showDefn ? "show" : ""}`}>
