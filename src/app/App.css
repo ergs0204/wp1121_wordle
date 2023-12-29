@@ -93,7 +93,7 @@ h1 {
 h2 {
     font-weight: 700;
     font-size: 23px;
-    padding: 50px;
+    padding: 30px;
     text-align: center;
     text-transform: uppercase;
 }
@@ -149,8 +149,18 @@ h2 {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 19px;
+    font-size: 29px;
+    font-weight: 700;
+    padding-left: 5%;
     color: #1d1d1d;
+}
+.matching .input input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 .matching .create {
     display: inline-block;
@@ -377,6 +387,29 @@ h2 {
 }
 .row > div:nth-child(5) {
     animation-delay: 0.8s;
+}
+
+/* Gamestat */
+.gamestat {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+}
+
+.gamestat .game {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #e1e0e0;
+    border-color: #575757;
+    border-radius: 6px;
+    color: #000000;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid#383838;
+    padding: 10px 50px;
+    margin: 0px auto;
 }
 
 /*Homepage*/
@@ -651,8 +684,16 @@ h2 {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 19px;
+    font-size: 24px;
     color: #1d1d1d;
+}
+.auth .input input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding-left: 1%;
 }
 
 .auth .forgot-password {
@@ -945,9 +986,11 @@ h2 {
     transition-delay: 0s, 0.25s, 0s;
 }
 .set-problem {
-    background: rgba(190, 203, 240, 0.85);
+    background: rgba(190, 203, 240, 0.75);
     display: flex;
     position: fixed;
+    justify-content: center;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     top: 0;
@@ -995,6 +1038,28 @@ h2 {
     margin: 15px auto;
 }
 
+.set-problem .solution-input {
+    width: 400px;
+    height: 50px;
+    background: transparent;
+    border: solid 2px #ffffff;
+    margin: 3%;
+    outline: none;
+    font-size: 29px;
+    color: #1d1d1d;
+}
+.set-problem .solution-input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+    font-size: 19px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.set-problem .hidden {
+    display: none;
+}
 .set-problem .solution {
     color: #ff004c;
     font-weight: bold;
@@ -1004,36 +1069,6 @@ h2 {
     text-align: center;
     margin: 30px 0 10px;
 }
-
-.set-problem .current {
-    justify-content: center;
-    margin: 30px auto;
-}
-
-.set-problem .current > div {
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-}
-
-.set-problem .meaning {
-    display: none;
-    transition: all;
-    transition-duration: 200ms;
-}
-.set-problem .meaning.show {
-    display: block;
-    padding: 0;
-}
-.set-problem p.definition {
-    font-size: 14px;
-    text-transform: capitalize;
-    line-height: 1.2;
-    font-weight: 300;
-    margin: 10px auto auto;
-    color: rgba(85, 85, 85, 0.867);
-}
-
 .set-problem button,
 .set-problem button:focus {
     position: relative;

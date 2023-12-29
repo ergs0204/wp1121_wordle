@@ -143,7 +143,7 @@ const MatchingRoom = () => {
             {action === "create" && (
               <div>
                 <button className="create" onClick={handleCreateRoom}>
-                  Create!
+                  Create!<span></span><span></span><span></span><span></span>
                 </button>
               </div>
             )}
@@ -158,7 +158,7 @@ const MatchingRoom = () => {
                     required
                   />
                   <button className="join" onClick={handleJoinRoom}>
-                    Join!
+                    Join!<span></span><span></span><span></span><span></span>
                   </button>
                 </div>
                 <p ref={errorRef} className={errorMsg ? "error" : "error hidden"} aria-live="assertive">
