@@ -59,10 +59,9 @@ export default function Auth() {
                 password: pwd,
                 email: email,
                 redirect: false,
-                callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
             })
             if (!res?.error) {
-                router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/`);
+                router.push("/");
             } else {
                 setErrorMsg(res.error || "Login failed");
             }
@@ -72,11 +71,10 @@ export default function Auth() {
                 email: email,
                 password: pwd,
                 redirect: false,
-                callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
             });
     
             if (!res?.error) {
-                router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/`);
+                router.push("/");
             } else {
                 setErrorMsg(res.error || "Login failed");
             }
