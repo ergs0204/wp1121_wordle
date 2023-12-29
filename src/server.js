@@ -22,30 +22,30 @@ io.on("connection", (socket) => {
   const updatePlayers = (roomCode) => {
     const room = rooms.get(roomCode);
     if (room) {
-      const playersInfo = Object.entries(room).map(([id, player]) => ({
-        id,
+      const playersInfo = Object.entries(room).map(([username, player]) => ({
+        username,
         ready: player.ready
       }));
       io.to(roomCode).emit("update-players", playersInfo);
     }
   };
 
-  socket.on("create-room", (roomCode) => {
+  socket.on("create-room", (roomCode, username) => {
     if (rooms.has(roomCode)) {
       socket.emit("room-exists", roomCode);
     } else {
-      rooms.set(roomCode, { [socket.id]: { ready: false } });
+      rooms.set(roomCode, { [username]: { ready: false } });
       socket.join(roomCode);
       socket.emit("room-created", roomCode);
       updatePlayers(roomCode);
     }
   });
 
-  socket.on("join-room", (roomCode) => {
+  socket.on("join-room", (roomCode, username) => {
     if (rooms.has(roomCode)) {
       const room = rooms.get(roomCode);
       if (Object.keys(room).length < 2) {
-        room[socket.id] = { ready: false };
+        room[username] = { ready: false };
         socket.join(roomCode);
         updatePlayers(roomCode);
       } else {
@@ -56,25 +56,32 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("player-ready", (roomCode) => {
+  socket.on("player-ready", (roomCode, username) => {
     const room = rooms.get(roomCode);
-    if (room && room[socket.id]) {
-      room[socket.id].ready = true;
+    if (room && room[username]) {
+      room[username].ready = true;
       updatePlayers(roomCode);
       const allReady = Object.values(room).every(player => player.ready);
       if (allReady && Object.keys(room).length === 2) {
         io.to(roomCode).emit("start-game");
-        Object.keys(room).forEach(playerId => {
-          io.sockets.sockets.get(playerId)?.join("playing" + roomCode);
+      const socketsInRoom = io.sockets.adapter.rooms.get(roomCode);
+      if (socketsInRoom) {
+        socketsInRoom.forEach(socketId => {
+          const socket = io.sockets.sockets.get(socketId);
+          if (socket) {
+            socket.join("playing" + roomCode);
+            socket.leave(roomCode);
+          }
         });
+      }
       }
     }
   });
 
-  socket.on("player-not-ready", (roomCode) => {
+  socket.on("player-not-ready", (roomCode, username) => {
     const room = rooms.get(roomCode);
-    if (room && room[socket.id]) {
-      room[socket.id].ready = false;
+    if (room && room[username]) {
+      room[username].ready = false;
       updatePlayers(roomCode);
     }
   });

@@ -1,10 +1,15 @@
-"use client"
+"use client";
+
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { useRouter } from 'next/navigation';
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 import SocketContext from "@/app/socket/SocketProvider";
+
 // const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
 interface Player {
-  id: string;
+  username: string;
   ready: boolean;
 }
 
@@ -19,6 +24,8 @@ const MatchingRoom = () => {
   const errorRef = useRef<HTMLParagraphElement>(null);
   const router = useRouter();
   const socket = useContext(SocketContext);
+  const { data: session } = useSession();
+  const username = session?.user?.username;
   useEffect(() => {
     setErrorMsg("");
   }, [roomCode]);
@@ -55,7 +62,6 @@ const MatchingRoom = () => {
 
       socket.on("start-game", () => {
         router.push(`/multiPlayer?roomCode=${roomCode}`);
-        
       });
     }
   }, [socket, isInRoom]);
@@ -71,7 +77,7 @@ const MatchingRoom = () => {
   const handleCreateRoom = () => {
     const newRoomCode = generateRoomCode();
     if (socket) {
-      socket.emit("create-room", newRoomCode);
+      socket.emit("create-room", newRoomCode, username);
       setRoomCode(newRoomCode);
     } else {
       console.log("Socket not initialized");
@@ -88,7 +94,7 @@ const MatchingRoom = () => {
       return;
     }
     if (socket) {
-      socket.emit("join-room", roomCode);
+      socket.emit("join-room", roomCode, username);
     } else {
       console.log("Socket not initialized");
     }
@@ -98,7 +104,9 @@ const MatchingRoom = () => {
     const characters = "0123456789";
     let result = "";
     for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length),
+      );
     }
     return result;
   };
@@ -109,10 +117,10 @@ const MatchingRoom = () => {
       return;
     }
     if (!isReady) {
-      socket.emit("player-ready", roomCode);
+      socket.emit("player-ready", roomCode, username);
       setIsReady(true);
     } else {
-      socket.emit("player-not-ready", roomCode);
+      socket.emit("player-not-ready", roomCode, username);
       setIsReady(false);
     }
   };
@@ -143,7 +151,10 @@ const MatchingRoom = () => {
             {action === "create" && (
               <div>
                 <button className="create" onClick={handleCreateRoom}>
-                  Create!<span></span><span></span><span></span><span></span>
+                  Create!<span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </button>
               </div>
             )}
@@ -158,10 +169,17 @@ const MatchingRoom = () => {
                     required
                   />
                   <button className="join" onClick={handleJoinRoom}>
-                    Join!<span></span><span></span><span></span><span></span>
+                    Join!<span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                   </button>
                 </div>
-                <p ref={errorRef} className={errorMsg ? "error" : "error hidden"} aria-live="assertive">
+                <p
+                  ref={errorRef}
+                  className={errorMsg ? "error" : "error hidden"}
+                  aria-live="assertive"
+                >
                   {errorMsg}
                 </p>
               </>
@@ -170,23 +188,26 @@ const MatchingRoom = () => {
         </>
       )}
       {isInRoom && (
-        <div>
+        <div className="room-info">
           <h2>Your room code is:</h2>
           <h2 className="room-code">{roomCode}</h2>
-          <h2>Players in Room:</h2>
-          <ul>
-            {playersInRoom.map((player) => (
-              <li key={player.id}>
-                ID: {player.id}, Ready: {player.ready ? "Yes" : "No"}
-              </li>
-            ))}
-          </ul>
-          <button
-            className={isReady ? "ready-button" : "start-button"}
-            onClick={handleStartGame}
-          >
-            {isReady ? "等待對手" : "開始遊戲"}
-          </button>
+          <div className="players-section">
+            <h2>Players in Room:</h2>
+            <ul className="players-list">
+              {playersInRoom.map((player) => (
+                <li key={player.username} className="player-item">
+                  <h3>{player.username}</h3>
+                    <div>{player.ready ? "ready" : "not ready"}</div>
+                </li>
+              ))}
+            </ul>
+            <button
+              className={isReady ? "ready-button" : "start-button"}
+              onClick={handleStartGame}
+            >
+              {isReady ? "please wait..." : "game start"}
+            </button>
+          </div>
         </div>
       )}
     </div>

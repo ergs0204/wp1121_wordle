@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 export default function SetProblem({provideProblem}) {
     const [solution, setSolution] = useState();
     const [errorMsg, setErrorMsg] = useState("");
+    const [isProvideProblem, setIsProvideProblem] = useState(false);
     const errorRef = useRef();
     const socket = useContext(SocketContext);
     const searchParams = useSearchParams();
@@ -30,7 +31,7 @@ export default function SetProblem({provideProblem}) {
         // };
         socket.emit("set-problem", solution, roomCode);
         provideProblem(solution);
-    
+        setIsProvideProblem(true);
         return true;
       };
 
@@ -46,7 +47,7 @@ export default function SetProblem({provideProblem}) {
                 required
             />
             <p ref={errorRef} className={errorMsg?"error":"error hidden"} aria-live="assertive">{errorMsg}</p>
-            <button onClick={handleSave}>start!</button>
+            <button onClick={handleSave}>{isProvideProblem?"wait for opponent...":"start!"}</button>
             {/* <div>
                 <p className="solution">THE SOLUTION IS: </p>
                 {solutionBlock}

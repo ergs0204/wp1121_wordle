@@ -49,6 +49,7 @@ function Multiplayer() {
       socket.on("get-problem", (solution) => {
         setIsGetSolution(true);
         setSolution(solution);
+        console.log("bbb");
       });
       socket.on("get-guess", (formattedGuess, turn) => {
         setGuesses((guesses) => {
@@ -97,7 +98,7 @@ function Multiplayer() {
             </div>
             <div className="opponent">
               <a>OPPONENT</a>
-              <a>{problem}</a>
+              <h2>{problem}</h2>
               <Grid guesses={guesses} currentGuess={currentGuess} turn={turn} />
             </div>
           </div>
