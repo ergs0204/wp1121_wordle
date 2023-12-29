@@ -42,4 +42,4 @@ for file in res:
 	# print(words[:10])
 	# break
 	with open(path+"/new"+file, 'w') as f:
-		json.dump(words, f)
+		json.dump(words, f ,indent=3)
