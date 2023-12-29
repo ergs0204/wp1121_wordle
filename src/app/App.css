@@ -149,8 +149,18 @@ h2 {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 19px;
+    font-size: 29px;
+    font-weight: 700;
+    padding-left: 5%;
     color: #1d1d1d;
+}
+.matching .input input::placeholder {
+    color: #000000;
+    opacity: 0.3;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 .matching .create {
     display: inline-block;
