@@ -35,8 +35,8 @@ export default function Auth() {
     const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
         
-        if (user === "" || pwd === "" || (action === "Sign up" && confirmPwd === "")) {
-            setErrorMsg("Username and password cannot be empty!");
+        if (email === "" || pwd === "") {
+            setErrorMsg("Email and password cannot be empty!");
             return;
         }
         if (action === "Sign up" && email === "") {
@@ -52,15 +52,35 @@ export default function Auth() {
             return;
         }
 
-        const res = await signIn("credentials", {
-            username: user,
-            password: pwd,
-            email: email,
-            redirect: false,
-            // callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
-        })
-        console.log(res);
-        console.log(user, pwd, confirmPwd, email);
+        
+        if (action === "Sign up") {
+            const res = await signIn("credentials", {
+                username: user,
+                password: pwd,
+                email: email,
+                redirect: false,
+                callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
+            })
+            if (!res?.error) {
+                router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/`);
+            } else {
+                setErrorMsg(res.error || "Login failed");
+            }
+        }
+        if (action === "Login") {
+            const res = await signIn("credentials", {
+                email: email,
+                password: pwd,
+                redirect: false,
+                callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
+            });
+    
+            if (!res?.error) {
+                router.push(`${publicEnv.NEXT_PUBLIC_BASE_URL}/`);
+            } else {
+                setErrorMsg(res.error || "Login failed");
+            }
+        }
     }
 
     return (
@@ -70,59 +90,80 @@ export default function Auth() {
                 <div className="underline"></div>
             </div>
             <div className="submit-container">
-                <div className={action==="Login"?"submit gray":"submit"} onClick={()=>{setAction("Sign up")}}>Sign up</div>
-                <div className={action==="Sign up"?"submit gray":"submit"} onClick={()=>{setAction("Login")}}>Login</div>
+                <div className={action === "Login" ? "submit gray" : "submit"} onClick={() => setAction("Sign up")}>Sign up</div>
+                <div className={action === "Sign up" ? "submit gray" : "submit"} onClick={() => setAction("Login")}>Login</div>
             </div>
-            <p ref={errorRef} className={errorMsg?"error":"error hidden"} aria-live="assertive">{errorMsg}</p>
+            <p ref={errorRef} className={errorMsg ? "error" : "error hidden"} aria-live="assertive">{errorMsg}</p>
             <div className="inputs">
-                <div className="input">
-                    <img src='/person.png' alt="user icon" />
-                    <input 
-                        type="text" 
-                        ref={userRef} 
-                        placeholder="Username" 
-                        onChange={(e) => setUser(e.target.value)} 
-                        value={user}
-                        required 
-                    />
-                </div>
-                <div className="input">
-                    <img src="/password.png" alt="pwd icon" />
-                    <input 
-                        type="password" 
-                        placeholder="Password" 
-                        onChange={(e) => setPwd(e.target.value)}
-                        value={pwd}
-                        required
-                    />
-                </div>
-                {action==="Login"
-                ?
-                <></>
-                :
-                <>
-                <div className="input">
-                    <img src="/password.png" alt="pwd icon" />
-                    <input 
-                        type="password" 
-                        placeholder="Confirm Password" 
-                        onChange={(e) => setConfirmPwd(e.target.value)}
-                        value={confirmPwd}
-                        required
-                    />
-                </div>
-                <div className="input">
-                    <img src="/email.png" alt="email icon" />
-                    <input 
-                        type="email" 
-                        placeholder="Email" 
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                        required
-                    />
-                </div>
-                </>
-                }
+                {action === "Login" && (
+                    <>
+                        <div className="input">
+                            <img src="/email.png" alt="email icon" />
+                            <input 
+                                type="email" 
+                                placeholder="Email" 
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                required
+                            />
+                        </div>
+                        <div className="input">
+                            <img src="/password.png" alt="pwd icon" />
+                            <input 
+                                type="password" 
+                                placeholder="Password" 
+                                onChange={(e) => setPwd(e.target.value)}
+                                value={pwd}
+                                required
+                            />
+                        </div>
+                    </>
+                )}
+                {action === "Sign up" && (
+                    <>
+                        <div className="input">
+                            <img src="/email.png" alt="email icon" />
+                            <input 
+                                type="email" 
+                                placeholder="Email" 
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                required
+                            />
+                        </div>
+                        <div className="input">
+                            <img src='/person.png' alt="user icon" />
+                            <input 
+                                type="text" 
+                                ref={userRef} 
+                                placeholder="Username" 
+                                onChange={(e) => setUser(e.target.value)} 
+                                value={user}
+                                required 
+                            />
+                        </div>
+                        <div className="input">
+                            <img src="/password.png" alt="pwd icon" />
+                            <input 
+                                type="password" 
+                                placeholder="Password" 
+                                onChange={(e) => setPwd(e.target.value)}
+                                value={pwd}
+                                required
+                            />
+                        </div>
+                        <div className="input">
+                            <img src="/password.png" alt="pwd icon" />
+                            <input 
+                                type="password" 
+                                placeholder="Confirm Password" 
+                                onChange={(e) => setConfirmPwd(e.target.value)}
+                                value={confirmPwd}
+                                required
+                            />
+                        </div>
+                    </>
+                )}
             </div>
             <br />
             <div className="submit-container">
@@ -130,4 +171,6 @@ export default function Auth() {
             </div>
         </div>
     );
+    
+    
 }
