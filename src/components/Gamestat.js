@@ -8,9 +8,10 @@ export default function Gamestat ({ user }){
         console.log(scoreboard);
         {scoreboard.map((user, i) => {
             return (
-                <div key={i} className="user">
-                    <div className="username">{user.username}</div>
-                    <div className="score">{user.score}</div>
+                <div key={i} className="game">
+                    <div className="word">1</div>
+                    <div className="turn">2</div>
+                    <div className="time">3</div>
                 </div>
             );
         })}
@@ -18,7 +19,11 @@ export default function Gamestat ({ user }){
 
     return (
         <div className="gamestat">
-            
+            <div className="game">
+                <div className="word">word</div>
+                <div className="turn">turn</div>
+                <div className="time">time</div>
+            </div>
         </div>
     );
 };
