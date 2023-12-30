@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
   const userId = session.user.id;
   const gameInfo = await req.json();
   try {
-    // console.log("--------------------------------------")
-    // console.log("gameInfo :",gameInfo)
+    console.log("--------------------------------------")
+    console.log("gameInfo :",gameInfo)
     gameInfoSchema.parse(gameInfo);
   } catch (error) {
     console.log(error);
