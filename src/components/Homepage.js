@@ -16,13 +16,13 @@ export default function Homepage() {
     return (
         <div className="homepage">
             
-            <h1 className="title">Wordle</h1>
-            <div>
             {session ? (
                 <h3>Welcome, {session.user.username}!</h3>
             ) : (
                 <h3>You are not logged in.</h3>
             )}
+            <h1 className="title">Wordle</h1>
+            <div>
             </div>
             <button className="mode from-center" onClick={() => router.push('/singlePlayer')}>single player</button>
             <button className="mode from-center" onClick={() => router.push('/matchingRoom')}>multiplayer</button>

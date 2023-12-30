@@ -55,7 +55,7 @@ a {
   padding: 10px;
   margin-bottom: 5px;
   border-radius: 5px;
-  width: 300px; /* 根据需要调整宽度 */
+  width: 300px; 
   text-align: center;
 }
 
@@ -208,10 +208,9 @@ h2 {
 }
 .matching .create {
   display: inline-block;
-
   position: relative;
-  top: 50%;
-  left: 41%;
+  top: 150%;
+  left: 38.7rem;
   z-index: 1;
   min-width: 200px;
   background: #ffffff;
@@ -439,7 +438,6 @@ h2 {
   width: 80%;
   margin: 10px auto;
 }
-
 .gamestat .game {
   display: flex;
   flex-direction: row;
@@ -452,6 +450,20 @@ h2 {
   font-size: 1.3rem;
   text-transform: uppercase;
   border-bottom: 2px solid#383838;
+  padding: 10px 50px;
+  margin: 0px auto;
+}
+.gamestat .user {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #eefaff;
+  border-radius: 6px;
+  color: #000000;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
   padding: 10px 50px;
   margin: 0px auto;
 }
