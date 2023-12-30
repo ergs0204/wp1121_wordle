@@ -1,7 +1,7 @@
 import React from "react";
 // import { getScoreboard } from "../app/api/getScoreboard";
 
-export default function Gamestat ({ user }){
+export default function Gamestat ({ user, score, gameInfos }){
 
     const fetchScoreboard = () => {
         const scoreboard = getScoreboard();
