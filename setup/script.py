@@ -38,7 +38,9 @@ conn = psycopg2.connect(database = "wordle",
 cur = conn.cursor()
 
 # resetcorpus()
+# reset_table("games")
+# reset_table("users")
 reset_table("scores")
 show_table("users")
 show_table("scores")
-show_table("games")
+# show_table("games")

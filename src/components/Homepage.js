@@ -8,10 +8,10 @@ export default function Homepage() {
     const router = useRouter();
     const { data: session } = useSession();
     const handleLogout = () => {
-        // HttpSession session = request.getSession();
+        // session = request.getSession();
         // session.invalidate();
         // response.sendRedirect(request.getContextPath() + "/auth");
-        router.push("/auth")
+        router.push("/auth/signout")
     }
     return (
         <div className="homepage">
