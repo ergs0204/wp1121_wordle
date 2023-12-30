@@ -153,9 +153,9 @@ h2 {
 }
 
 .multiplayer .multizone {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  align-items: start;
   justify-content: center;
   margin: 10px auto;
 }
@@ -173,7 +173,11 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0px auto;
+  border-radius: 5%;
+  margin: 40px;
+  background-color: #fafcff;
+  border: #828282 solid 2px;
+  padding: 20px;
 }
 
 .matching .input {

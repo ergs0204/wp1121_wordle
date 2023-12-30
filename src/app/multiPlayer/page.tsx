@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import "@/app/App.css";
 import SocketContext from "@/app/socket/SocketProvider";
 import Grid from "@/components/Grid";
-import SetProblem from "@/components/SetProblem";
+import SetProblem from "@/components/SetProblem2";
 import Wordle from "@/components/Wordle";
 // import words from "./data/wordDb";
 import dictionary from "@/data/dictionary";
@@ -15,7 +15,7 @@ import dictionary from "@/data/dictionary";
 function Multiplayer() {
   const [solution, setSolution] = useState<String>();
   const [problem, setProblem] = useState<String>();
-  const [isProvideProblem, setIsProvideProblem] = useState(false);
+  const [isProvideProblem, setIsProvideProblem] = useState(true);
   const [isGetSolution, setIsGetSolution] = useState(false);
   const [words, setWords] = useState<String[]>([]);
   const [beginTime, setBeginTime] = useState("");
@@ -83,7 +83,7 @@ function Multiplayer() {
 
   return (
     <div className="multiplayer">
-      {!isGetSolution || !isProvideProblem ? (
+      {isGetSolution || !isProvideProblem ? (
         <SetProblem provideProblem={provideProblem} />
       ) : (
         <div>
