@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect, useRef, useContext } from "react";
-// import dictionary from "../data/dictionary";
+import dictionary from "../data/dictionary";
 import SocketContext from "@/app/socket/SocketProvider";
 import { useSearchParams } from 'next/navigation';
 
