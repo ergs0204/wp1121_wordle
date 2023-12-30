@@ -26,7 +26,7 @@ export default function Homepage() {
             </div>
             <button className="mode from-center" onClick={() => router.push('/singlePlayer')}>single player</button>
             <button className="mode from-center" onClick={() => router.push('/matchingRoom')}>multiplayer</button>
-            <button className="mode from-center" onClick={() => router.push('/statistic')}>statistic</button>
+            {/* <button className="mode from-center" onClick={() => router.push('/statistic')}>statistic</button> */}
             <button className="mode from-center" onClick={ handleLogout }>logout</button>
             <Footer />
         </div>
