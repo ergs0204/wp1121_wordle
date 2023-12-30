@@ -8,12 +8,12 @@ export default function Gamestat ({ gameInfos }){
     // const startTime = gameInfos.startTime;
     // const endTime = gameInfos.endTime;
     // const gameTime = endTime - startTime;
+    const { data: session } = useSession();
     if(gameInfos){
         gameInfos.map((gameInfo) => {
             console.log(gameInfo);
         });
     }
-    
 
     return (
         <div className="gamestat">
