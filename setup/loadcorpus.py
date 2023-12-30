@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import json
+from tqdm import tqdm
 
 def deletecorpus(conn,cur):
     cur.execute("TRUNCATE TABLE  corpus CASCADE;")
@@ -14,12 +15,13 @@ def deletecorpus(conn,cur):
 
 
 # connect to db
-conn = psycopg2.connect(database = "wordle", 
+conn = psycopg2.connect(database = "railway", 
                         user = "postgres", 
-                        host= 'localhost',
-                        password = "postgres",
-                        port = 5432)
+                        host= 'monorail.proxy.rlwy.net',
+                        password = "GDe44FCFFgbge*BC6B231F34afgEBAEd",
+                        port = 51216 )
 cur = conn.cursor()
+print("Connected")
 
 # deletecorpus(conn,cur)
 
@@ -46,8 +48,9 @@ for file in res:
         conn.commit()
         corpus_id = cur.fetchall()
     corpus_id = corpus_id[0][0]
-
+    progress = tqdm(total=len(words))
     for word, definition in words.items():
+        progress.update(1)
         truncated_definition = definition[:MAX_DEFINITION_LENGTH]
         cur.execute("SELECT id FROM words WHERE word = %s;", (word,))
         word_id = cur.fetchall()
