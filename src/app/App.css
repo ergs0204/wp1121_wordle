@@ -471,6 +471,14 @@ h2 {
   padding: 10px 50px;
   margin: 0px auto;
 }
+.gamestat .score {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
 
 /*Homepage*/
 .homepage {
