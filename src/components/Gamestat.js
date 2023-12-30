@@ -1,24 +1,25 @@
 import React from "react";
 // import { getScoreboard } from "../app/api/getScoreboard";
 
-export default function Gamestat ({ user }){
-
-    const fetchScoreboard = () => {
-        const scoreboard = getScoreboard();
-        console.log(scoreboard);
-        {scoreboard.map((user, i) => {
-            return (
-                <div key={i} className="user">
-                    <div className="username">{user.username}</div>
-                    <div className="score">{user.score}</div>
-                </div>
-            );
-        })}
+export default function Gamestat ({ gameInfos }){
+    // const gameWord = gameInfos.word;
+    // const gameTurn = gameInfos.guesses;
+    // const startTime = gameInfos.startTime;
+    // const endTime = gameInfos.endTime;
+    // const gameTime = endTime - startTime;
+    if(gameInfos){
+        gameInfos.map((gameInfo) => {
+            console.log(gameInfo);
+        });
+    
     }
-
     return (
         <div className="gamestat">
-            
+            <div className="game">
+                <div className="word">word</div>
+                <div className="turn">turn</div>
+                <div className="time">time</div>
+            </div>
         </div>
     );
 };

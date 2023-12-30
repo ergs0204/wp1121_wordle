@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import "@/app/App.css";
 import SocketContext from "@/app/socket/SocketProvider";
 import Grid from "@/components/Grid";
-import SetProblem from "@/components/Setproblem";
+import SetProblem from "@/components/SetProblem";
 import Wordle from "@/components/Wordle";
 // import words from "./data/wordDb";
 import dictionary from "@/data/dictionary";
