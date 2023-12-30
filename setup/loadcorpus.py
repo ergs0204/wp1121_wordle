@@ -2,6 +2,9 @@ import psycopg2
 import os
 import json
 from tqdm import tqdm
+import concurrent
+import concurrent.futures
+
 
 def deletecorpus(conn,cur):
     cur.execute("TRUNCATE TABLE  corpus CASCADE;")
@@ -13,13 +16,44 @@ def deletecorpus(conn,cur):
     conn.commit()
     print("deleted all")
 
+def request_post(progress,word,definition):
+    # print("Working on word",word)
+    truncated_definition = definition[:MAX_DEFINITION_LENGTH]
+    cur.execute("SELECT id FROM words WHERE word = %s;", (word,))
+    word_id = cur.fetchall()
+    if not len(word_id):
+        cur.execute("INSERT INTO words(word, definition) VALUES(%s, %s) RETURNING id;", (word,  truncated_definition))
+        conn.commit()
+        word_id = cur.fetchall()
+    word_id = word_id[0][0]
+
+    cur.execute("SELECT id FROM \"wordCorpusRelation\" WHERE corpus_id = %s AND word_id = %s;", (corpus_id, word_id))
+    relation_id = cur.fetchall()
+    if not len(relation_id):
+        cur.execute("INSERT INTO \"wordCorpusRelation\"(corpus_id, word_id) VALUES(%s, %s) RETURNING id;", (corpus_id, word_id))
+        conn.commit()
+        relation_id = cur.fetchall()
+    else:
+        # print(f"Relation  {word} / {corpusname} already exist")
+        pass
+    relation_id = relation_id[0][0]
+    if relation_id:
+        # print(f"Successfully add {word} in {corpusname}")
+        pass
+    conn.commit()
+    # print("finish word: ",word)
+    progress.update(1)
+
+
+
+
 
 # connect to db
 conn = psycopg2.connect(database = "railway", 
                         user = "postgres", 
                         host= 'monorail.proxy.rlwy.net',
                         password = "GDe44FCFFgbge*BC6B231F34afgEBAEd",
-                        port = 51216 )
+                        port = 51216)
 cur = conn.cursor()
 print("Connected")
 
@@ -49,30 +83,35 @@ for file in res:
         corpus_id = cur.fetchall()
     corpus_id = corpus_id[0][0]
     progress = tqdm(total=len(words))
-    for word, definition in words.items():
-        progress.update(1)
-        truncated_definition = definition[:MAX_DEFINITION_LENGTH]
-        cur.execute("SELECT id FROM words WHERE word = %s;", (word,))
-        word_id = cur.fetchall()
-        if not len(word_id):
-            cur.execute("INSERT INTO words(word, definition) VALUES(%s, %s) RETURNING id;", (word,  truncated_definition))
-            conn.commit()
-            word_id = cur.fetchall()
-        word_id = word_id[0][0]
 
-        cur.execute("SELECT id FROM \"wordCorpusRelation\" WHERE corpus_id = %s AND word_id = %s;", (corpus_id, word_id))
-        relation_id = cur.fetchall()
-        if not len(relation_id):
-            cur.execute("INSERT INTO \"wordCorpusRelation\"(corpus_id, word_id) VALUES(%s, %s) RETURNING id;", (corpus_id, word_id))
-            conn.commit()
-            relation_id = cur.fetchall()
-        else:
-            # print(f"Relation  {word} / {corpusname} already exist")
-            pass
-        relation_id = relation_id[0][0]
-        if relation_id:
-            # print(f"Successfully add {word} in {corpusname}")
-            pass
-        conn.commit()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor: # optimally defined number of threads
+        res = [executor.submit(request_post,progress, word, definition) for word, definition in words.items()]
+        concurrent.futures.wait(res)
+    # for word, definition in words.items():
+    #     progress.update(1)
+    #     # asyncio.create_task(call_postgres_function(word,definition))
+    #     truncated_definition = definition[:MAX_DEFINITION_LENGTH]
+    #     cur.execute("SELECT id FROM words WHERE word = %s;", (word,))
+    #     word_id = cur.fetchall()
+    #     if not len(word_id):
+    #         cur.execute("INSERT INTO words(word, definition) VALUES(%s, %s) RETURNING id;", (word,  truncated_definition))
+    #         conn.commit()
+    #         word_id = cur.fetchall()
+    #     word_id = word_id[0][0]
+
+    #     cur.execute("SELECT id FROM \"wordCorpusRelation\" WHERE corpus_id = %s AND word_id = %s;", (corpus_id, word_id))
+    #     relation_id = cur.fetchall()
+    #     if not len(relation_id):
+    #         cur.execute("INSERT INTO \"wordCorpusRelation\"(corpus_id, word_id) VALUES(%s, %s) RETURNING id;", (corpus_id, word_id))
+    #         conn.commit()
+    #         relation_id = cur.fetchall()
+    #     else:
+    #         # print(f"Relation  {word} / {corpusname} already exist")
+    #         pass
+    #     relation_id = relation_id[0][0]
+    #     if relation_id:
+    #         # print(f"Successfully add {word} in {corpusname}")
+    #         pass
+    #     conn.commit()
 
 print("Finish loading corpus")
