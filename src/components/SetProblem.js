@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+"use client"
+import React, { useState, useEffect, useRef, useContext } from "react";
 import dictionary from "../data/dictionary";
+import SocketContext from "@/app/socket/SocketProvider";
+import { useSearchParams } from 'next/navigation';
 
-export default function SetProblem2() {
+export default function SetProblem({provideProblem}) {
     const [solution, setSolution] = useState();
     const [errorMsg, setErrorMsg] = useState("");
+    const [isProvideProblem, setIsProvideProblem] = useState(false);
     const errorRef = useRef();
-
+    const socket = useContext(SocketContext);
+    const searchParams = useSearchParams();
+    const roomCode = searchParams.get("roomCode");
     useEffect(() => {
         setErrorMsg("");
     }, [solution]);
@@ -19,13 +25,13 @@ export default function SetProblem2() {
             setErrorMsg("Solution must be 5 characters!");
             return false;
         };
-        if (!dictionary.includes(solution)) {
-            setErrorMsg("Solution must be a valid word!");
-            return false;
-        };
-
-        // setDialogOpen(false);
-    
+        // if (!dictionary.includes(solution)) {
+        //     setErrorMsg("Solution must be a valid word!");
+        //     return false;
+        // };
+        socket.emit("set-problem", solution, roomCode);
+        provideProblem(solution);
+        setIsProvideProblem(true);
         return true;
       };
 
@@ -35,14 +41,13 @@ export default function SetProblem2() {
             <h2>Set Problem</h2>
             <h3>Enter your problem:</h3>
             <textarea
-                className="solution-input"
                 placeholder="Enter your problem here..."
                 onChange={(e) => setSolution(e.target.value)}
                 value={solution}
                 required
             />
             <p ref={errorRef} className={errorMsg?"error":"error hidden"} aria-live="assertive">{errorMsg}</p>
-            <button onClick={handleSave}>start!</button>
+            <button onClick={handleSave}>{isProvideProblem?"wait for opponent...":"start!"}</button>
             {/* <div>
                 <p className="solution">THE SOLUTION IS: </p>
                 {solutionBlock}

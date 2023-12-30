@@ -43,7 +43,7 @@ const Wordle = ({ words, solution, beginTime, setIsPlayAgain}) => {
             window.removeEventListener("keyup", handleKeyUp);
             saveGameResult();
         }
-        setEndTime(new Date().toLocaleString());
+        setEndTime(new Date().toLocaleString("en-US"));
         return () => window.removeEventListener("keyup", handleKeyUp);
     }, [handleKeyUp, isCorrect, turn]);
 
