@@ -8,7 +8,6 @@ import { useRouter, redirect } from "next/navigation";
 import { auth, GET, POST } from "@/lib/auth";
 
 export default function Auth() {
-    const setAuth = useContext(AuthContext);
     const [action, setAction] = useState<string>("Sign up");
     const userRef = useRef<HTMLInputElement>(null);
     const errorRef = useRef<HTMLParagraphElement>(null);

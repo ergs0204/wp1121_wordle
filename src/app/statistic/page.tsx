@@ -28,7 +28,7 @@ export default function Statistic (){
             <button className="back" onClick={() => router.push("/")}>Home</button>
             <h1>Wordle Statistic</h1>
             <div>
-                <Gamestat gameInfos={gameInfos}/>
+                <Gamestat gameInfos={gameInfos} score={score}/>
             </div>
         </div>
     );
