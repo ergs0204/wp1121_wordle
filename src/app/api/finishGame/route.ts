@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
   const userId = session.user.id;
   const gameInfo = await req.json();
   try {
-    console.log("--------------------------------------")
-    console.log("gameInfo :",gameInfo)
+    // console.log("--------------------------------------")
+    // console.log("gameInfo :",gameInfo)
     gameInfoSchema.parse(gameInfo);
   } catch (error) {
     console.log(error);
@@ -102,32 +102,23 @@ export async function POST(req: NextRequest) {
         .execute();
     }
 
-    const currentScoreRecord = await db
+    let currentScoreRecord = await db
       .select()
       .from(scoresTable)
       .where(eq(scoresTable.userId, userId))
       .execute();
-    
-    console.log("scoreRecord",currentScoreRecord );
-    // console.log("!score",!currentScoreRecord.length );
+    let currentScore;
     if (!currentScoreRecord.length){
-      console.log("adding user to score table")
       await db
         .insert(scoresTable)
         .values({
           userId:userId,
         })
         .returning();
-      const currentScore = 0;
-      console.log("currentScore in add",currentScore)
+      currentScore = 0;
     }else{
-      const currentScore = currentScoreRecord[0].score;
-      console.log("currentScore in alr",currentScore)
+      currentScore = currentScoreRecord[0].score;
     }
-    // TODO : currentScore not define from above (above console.log is ok)
-    console.log("currentScorerecord",currentScoreRecord)
-    const currentScore = currentScoreRecord[0].score;
-    console.log("currentScore",currentScore)
     await db
         .update(scoresTable)
         .set({
