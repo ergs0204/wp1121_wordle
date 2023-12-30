@@ -56,8 +56,7 @@ export default function Auth() {
             username: user,
             password: pwd,
             email: email,
-            redirect: false,
-            // callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
+            callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/`,
         })
         console.log(res);
         console.log(user, pwd, confirmPwd, email);
