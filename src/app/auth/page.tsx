@@ -58,7 +58,7 @@ export default function Auth() {
                 username: user,
                 password: pwd,
                 email: email,
-                redirect: false,
+                callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}`,
             })
             if (!res?.error) {
                 router.push("/");
@@ -67,10 +67,11 @@ export default function Auth() {
             }
         }
         if (action === "Login") {
+                        console.log(pwd, email)
             const res = await signIn("credentials", {
                 email: email,
                 password: pwd,
-                redirect: false,
+                callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}`,
             });
     
             if (!res?.error) {

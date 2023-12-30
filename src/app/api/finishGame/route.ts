@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
     await db
         .update(scoresTable)
         .set({
-          score: currentScore + 1,
+          score: currentScore?currentScore + 1:0,
         })
         .where(eq(scoresTable.userId, userId))
         .execute();
