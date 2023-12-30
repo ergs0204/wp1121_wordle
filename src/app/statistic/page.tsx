@@ -22,7 +22,6 @@ export default function Statistic (){
                 setGameInfos(gameInfos)
             })
             .catch(error => console.error(error));
-    
 
     return (
         <div className="statistic">
