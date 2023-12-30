@@ -4,7 +4,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import {wordCorpusRelationTable, wordsTable} from "@/db/schema";
-import type {} from "@/types";
 
 export async function GET() {
   console.log("Getting words")
