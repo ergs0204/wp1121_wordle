@@ -32,37 +32,41 @@ for file_path in os.listdir(path):
         # add filename to list
         res.append(file_path)
 
-for file in res:
-    f = open(path+"/"+file)
-    words = json.load(f)
-    corpusname=file[:-5]
-    print("Working on corpus : {}".format(corpusname))
-    cur.execute("SELECT id FROM corpus WHERE corpus_name = '{}';".format(corpusname))
-    corpus_id=cur.fetchall()
-    if (not len(corpus_id)):
-        cur.execute("INSERT INTO corpus( corpus_name) VALUES('{}') RETURNING id;".format(corpusname))
-        conn.commit()
-        corpus_id=cur.fetchall()
-    corpus_id=corpus_id[0][0]
-    for word in words:
-        cur.execute("SELECT id FROM words WHERE word = '{}';".format(word))
-        word_id=cur.fetchall()
-        if (not len(word_id)):
-            cur.execute("INSERT INTO words( word,definition) VALUES('{}','{}') RETURNING id;".format(word,words[word]))
-            conn.commit()
-            word_id=cur.fetchall()
-        word_id=word_id[0][0]
+MAX_DEFINITION_LENGTH = 1000
 
-        cur.execute("SELECT id FROM \"wordCorpusRelation\" WHERE corpus_id = '{}' AND word_id = '{}';".format(corpus_id,word_id))
-        relation_id=cur.fetchall()
-        if (not len(relation_id)):
-            cur.execute("INSERT INTO \"wordCorpusRelation\"( corpus_id,word_id) VALUES('{}','{}') RETURNING id;".format(corpus_id,word_id))
+for file in res:
+    with open(path+"/"+file) as f:
+        words = json.load(f)
+    corpusname = file[:-5]
+    print("Working on corpus : {}".format(corpusname))
+    cur.execute("SELECT id FROM corpus WHERE corpus_name = %s;", (corpusname,))
+    corpus_id = cur.fetchall()
+    if not len(corpus_id):
+        cur.execute("INSERT INTO corpus(corpus_name) VALUES(%s) RETURNING id;", (corpusname,))
+        conn.commit()
+        corpus_id = cur.fetchall()
+    corpus_id = corpus_id[0][0]
+
+    for word, definition in words.items():
+        truncated_definition = definition[:MAX_DEFINITION_LENGTH]
+        cur.execute("SELECT id FROM words WHERE word = %s;", (word,))
+        word_id = cur.fetchall()
+        if not len(word_id):
+            cur.execute("INSERT INTO words(word, definition) VALUES(%s, %s) RETURNING id;", (word,  truncated_definition))
             conn.commit()
-            relation_id=cur.fetchall()
+            word_id = cur.fetchall()
+        word_id = word_id[0][0]
+
+        cur.execute("SELECT id FROM \"wordCorpusRelation\" WHERE corpus_id = %s AND word_id = %s;", (corpus_id, word_id))
+        relation_id = cur.fetchall()
+        if not len(relation_id):
+            cur.execute("INSERT INTO \"wordCorpusRelation\"(corpus_id, word_id) VALUES(%s, %s) RETURNING id;", (corpus_id, word_id))
+            conn.commit()
+            relation_id = cur.fetchall()
         else:
             # print(f"Relation  {word} / {corpusname} already exist")
             pass
-        relation_id=relation_id[0][0]
+        relation_id = relation_id[0][0]
         if relation_id:
             # print(f"Successfully add {word} in {corpusname}")
             pass
