@@ -12,6 +12,7 @@ export default function Gamestat ({ gameInfos }){
         gameInfos.map((gameInfo) => {
             console.log(gameInfo);
         });
+    }
     
 
     return (
