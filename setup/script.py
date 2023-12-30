@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import json
+from env import database,user,host,password,port
 
 def resetcorpus(conn,cur):
     cur.execute("TRUNCATE TABLE  corpus CASCADE;")
@@ -30,17 +31,17 @@ def addscore(user):
 
 
 # connect to db
-conn = psycopg2.connect(database = "wordle", 
-                        user = "postgres", 
-                        host= 'localhost',
-                        password = "postgres",
-                        port = 5432)
+conn = psycopg2.connect(database = database, 
+                        user = user, 
+                        host= host,
+                        password = password,
+                        port = port)
 cur = conn.cursor()
 
 # resetcorpus()
 # reset_table("games")
 # reset_table("users")
-reset_table("scores")
+# reset_table("scores")
 show_table("users")
 show_table("scores")
 # show_table("games")
