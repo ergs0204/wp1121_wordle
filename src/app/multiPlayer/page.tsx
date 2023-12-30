@@ -15,7 +15,7 @@ import dictionary from "@/data/dictionary";
 function Multiplayer() {
   const [solution, setSolution] = useState<String>();
   const [problem, setProblem] = useState<String>();
-  const [isProvideProblem, setIsProvideProblem] = useState(true);
+  const [isProvideProblem, setIsProvideProblem] = useState(false);
   const [isGetSolution, setIsGetSolution] = useState(false);
   const [words, setWords] = useState<String[]>([]);
   const [beginTime, setBeginTime] = useState("");
@@ -83,7 +83,7 @@ function Multiplayer() {
 
   return (
     <div className="multiplayer">
-      {isGetSolution || !isProvideProblem ? (
+      {!isGetSolution || !isProvideProblem ? (
         <SetProblem provideProblem={provideProblem} />
       ) : (
         <div>
