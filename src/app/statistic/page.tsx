@@ -6,18 +6,15 @@ import { useState } from "react";
 
 export default function Statistic (){
     const router = useRouter();
-    const [user, setUser] = useState<String>('');
     const [score, setScore] = useState<String>('');
     const [gameInfos, setGameInfos] = useState<String[]>([]);
 
     // TODO: get personal statistic from api
-    fetch('/api/getScoreboard')
+    fetch('/api/[userId]/getUserInfo')
             .then(response => response.json())
             .then((data) => {
-                const userId = data.userId
                 const score = data.score
                 const gameInfos = data.games
-                setUser(userId)
                 setScore(score)
                 setGameInfos(gameInfos)
             })
