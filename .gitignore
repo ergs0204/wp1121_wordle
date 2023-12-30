@@ -40,5 +40,5 @@ next-env.d.ts
 .env.local
 package-lock.json
 yarn.lock
-/setup/env.py
+env*.py
 */__pycache__/*
