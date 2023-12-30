@@ -1,7 +1,6 @@
 "use client"
 import React from "react";
 import { useSession } from "next-auth/react";
-// import { getScoreboard } from "../app/api/getScoreboard";
 
 export default function Gamestat({ score }) {
     // const gameWord = gameInfos.word;
@@ -9,6 +8,9 @@ export default function Gamestat({ score }) {
     // const startTime = gameInfos.startTime;
     // const endTime = gameInfos.endTime;
     // const gameTime = endTime - startTime;
+export default function Gamestat ({ gameInfos, score }){
+    const gameWord = gameInfos.word;
+    const gameTurn = gameInfos.guesses;
     const { data: session } = useSession();
 
 
@@ -30,7 +32,6 @@ export default function Gamestat({ score }) {
             <div className="game">
                 <div className="word">word</div>
                 <div className="turn">turn</div>
-                <div className="time">time</div>
             </div>
             {score.map((score) => {<>                           
             <div className="word">{score}</div></>

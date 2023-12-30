@@ -6,6 +6,7 @@ import { UserInfo } from "@/lib/types/type";
 
 export default function Statistic() {
     const router = useRouter();
+<<<<<<< HEAD
     const [score, setScore] = useState<String[]>([]);
     const [names, setNames] = useState<String[]>([]);
 
@@ -17,6 +18,19 @@ export default function Statistic() {
                 const newNames = data.map((user: UserInfo) => user.userId);
                 setScore(newScores);
                 setNames(newNames);
+=======
+    const [score, setScore] = useState<String>('');
+    const [gameInfos, setGameInfos] = useState<String[]>([]);
+
+    // TODO: get personal statistic from api
+    fetch('/api/[userId]/getUserInfo')
+            .then(response => response.json())
+            .then((data) => {
+                const score = data.score
+                const gameInfos = data.games
+                setScore(score)
+                setGameInfos(gameInfos)
+>>>>>>> 21a5e65d6a2e063e7dd029aeb61bd48e964d69c0
             })
             .catch(error => console.error(error));
     }, []);
