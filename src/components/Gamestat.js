@@ -3,7 +3,7 @@ import React from "react";
 import { useSession } from "next-auth/react";
 // import { getScoreboard } from "../app/api/getScoreboard";
 
-export default function Gamestat ({ score }){
+export default function Gamestat({ score }) {
     // const gameWord = gameInfos.word;
     // const gameTurn = gameInfos.guesses;
     // const startTime = gameInfos.startTime;
@@ -11,7 +11,7 @@ export default function Gamestat ({ score }){
     // const gameTime = endTime - startTime;
     const { data: session } = useSession();
 
-    
+
     const gamestat = () => {
 
         return (
@@ -25,14 +25,16 @@ export default function Gamestat ({ score }){
 
     return (
         <div className="gamestat">
-            <p className="user">Player:{session?.user?.username}</p>
-            <p className="score">Score:{score[0]}</p>
+            {/* <p className="user">Player:{names[0]}</p> */}
+            {/* <p className="score">Score:{score[0]}</p> */}
             <div className="game">
                 <div className="word">word</div>
                 <div className="turn">turn</div>
                 <div className="time">time</div>
             </div>
-            {gamestat()}
+            {score.map((score) => {<>                           
+            <div className="word">{score}</div></>
+            })}
         </div>
     );
 };

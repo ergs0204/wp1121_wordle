@@ -7,16 +7,20 @@ import { UserInfo } from "@/lib/types/type";
 export default function Statistic() {
     const router = useRouter();
     const [score, setScore] = useState<String[]>([]);
+    const [names, setNames] = useState<String[]>([]);
 
     useEffect(() => {
         fetch('/api/getScoreboard')
             .then(response => response.json())
             .then((data) => {
                 const newScores = data.map((user: UserInfo) => user.score);
+                const newNames = data.map((user: UserInfo) => user.userId);
                 setScore(newScores);
+                setNames(newNames);
             })
             .catch(error => console.error(error));
     }, []);
+
     return (
         <div className="statistic">
             <button className="back" onClick={() => router.push("/")}>Home</button>
