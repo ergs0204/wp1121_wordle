@@ -31,6 +31,7 @@ export const scoresTable = pgTable(
   {
     id: serial("id").primaryKey(),
     userId: uuid("user_id")
+    .unique()
     .notNull()
     .references(() => usersTable.displayId, {
       onDelete: "cascade",

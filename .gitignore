@@ -36,5 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 /pg-data
+.env.production
 .env.local
 package-lock.json
+yarn.lock

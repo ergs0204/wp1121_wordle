@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+"use client"
+import React, { useEffect, useState, useContext } from "react";
 import useWordle from "../hooks/useWordle";
 import Grid from "./Grid";
 import Modal from "./Modal";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 import Keypad from "./Keypad";
 import letters from "../data/letters";
 import Timer from "./Timer";
-import Setproblem from "./Setproblem";
+import SocketContext from "@/app/socket/SocketProvider";
 
-const Wordle = ({ words, solution, beginTime, mode }) => {
+const Wordle = ({ words, solution, beginTime, setIsPlayAgain}) => {
     const {
         currentGuess,
         setCurrentGuess,
@@ -20,30 +22,50 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
         setErrorMsg,
         resetGame,
         usedKeys,
-        wordHistory,
+        saveData,
     } = useWordle(words, solution);
 
     const [showModal, setShowModal] = useState(false);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const roomCode = searchParams.get("roomCode");
     const [costTime, setcostTime] = useState("");
     const [endTime, setEndTime] = useState("");
-    const router = useRouter();
-
+    const socket = useContext(SocketContext);
+    const [isOpponentEnd, setIsOpponentEnd] = useState(false);
+    const [isOpponentCorrect, setIsOpponentCorrect] = useState(false);
+    const [opponentTurn, setOpponentTurn] = useState(0);
     useEffect(() => {
         window.addEventListener("keyup", handleKeyUp);
         if (isCorrect || turn > 5) {
+            socket.emit("end-game", isCorrect, turn, roomCode);
             setTimeout(() => setShowModal(true), 1500);
             window.removeEventListener("keyup", handleKeyUp);
-            saveGameResult(); // Call the function to save the game result
+            saveGameResult();
         }
-        setEndTime(new Date().toLocaleTimeString());
+        setEndTime(new Date().toLocaleString("en-US"));
         return () => window.removeEventListener("keyup", handleKeyUp);
     }, [handleKeyUp, isCorrect, turn]);
 
+    useEffect(() => {
+        if (socket) {
+            socket.on("opponent-end-game", (isCorrect, turn) => {
+                setIsOpponentEnd(true);
+                setIsOpponentCorrect(isCorrect);
+                setOpponentTurn(turn);
+                setShowModal(true);
+                window.removeEventListener("keyup", handleKeyUp);
+            });
+        }
+    }, [socket]);
+    
     const saveGameResult = async () => {
         try {
+            // console.log(new Date(beginTime) );
+
             // Make an API call to your backend server to save the game result
-            console.log("history",wordHistory)
-            
+            // console.log("data",saveData);
+            // console.log("starttime",beginTime.getTime());
             const response = await fetch("/api/finishGame", {
                 method: "POST",
                 headers: {
@@ -53,16 +75,12 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
                     // Pass the necessary data to save the game result
                     // For example, you can pass the solution, turn, costTime, etc.
                     // TODO: userid / session
-                    userId: 1,
+                    // userId: "1",
                     word: solution,
                     corpusId: 1,
                     startTime: beginTime,
                     endTime: endTime,
-                    // guesses: {
-                    //   word: z.string().min(1).max(50),
-                    //   timestamp: z.string().transform((str) => new Date(str)),
-                    //   turn: z.number().min(1).max(10),
-                    // }.array(),
+                    guesses: saveData,
                 }),
             });
             if (response.ok) {
@@ -74,26 +92,31 @@ const Wordle = ({ words, solution, beginTime, mode }) => {
             console.error("An error occurred while saving the game result", error);
         }
     };
-
     const closeModal = () => {
         setShowModal(prev => !prev);
-        router.push("/newSgame");
+        if (!roomCode) {
+            router.push('/singlePlayer');
+        }
     };
+
+
 
     return (
         <div className="main">
-            {mode === "multiplayer" && <Setproblem />}
             <Timer showModal={showModal} setcostTime={setcostTime} />
             {showModal && (
                 <Modal
-                    isCorrect={isCorrect}
-                    turn={turn}
+                    isMulti={roomCode ? true : false}
+                    isCorrect={isOpponentEnd ? isOpponentCorrect : isCorrect}
+                    turn={isOpponentEnd ? opponentTurn : turn}
+                    isOpponentEnd={isOpponentEnd}
                     costTime={costTime}
                     beginTime={beginTime}
                     endTime={endTime}
                     solution={solution}
                     resetGame={resetGame}
                     closeModal={closeModal}
+                    setIsPlayAgain={setIsPlayAgain}
                 />
             )}
             {/* <div className="moves">Moves: {turn}/6</div> */}

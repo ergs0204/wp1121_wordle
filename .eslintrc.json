@@ -3,7 +3,7 @@
     {
       "files": ["*.mjs", "*.ts", "*.tsx"],
       "parserOptions": {
-        "project": "tsconfig.json"
+        "project": "./tsconfig.json"
       }
     }
   ],
@@ -13,25 +13,29 @@
     "project": "./tsconfig.json"
   },
   "plugins": ["react", "@typescript-eslint"],
+  // "extends": [
+  //   "next/core-web-vitals",
+  //   "eslint:recommended",
+  //   "plugin:@typescript-eslint/recommended",
+  //   "plugin:react/recommended",
+  //   "plugin:react-hooks/recommended",
+  //   "prettier"
+  // ],
   "extends": [
-    "next/core-web-vitals",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
+    "next"
   ],
-  "rules": {
-    "@typescript-eslint/consistent-type-imports": "warn",
-    "react/react-in-jsx-scope": "off",
-    "react/no-unescaped-entities": "off",
-    "react/function-component-definition": [
-      "warn",
-      {
-        "namedComponents": "function-declaration",
-        "unnamedComponents": "arrow-function"
-      }
-    ],
-    "@typescript-eslint/no-non-null-assertion": "off"
-  }
+  // "rules": {
+  //   "@typescript-eslint/consistent-type-imports": "warn",
+  //   "react/react-in-jsx-scope": "off",
+  //   "react/no-unescaped-entities": "off",
+  //   "react/function-component-definition": [
+  //     "warn",
+  //     {
+  //       "namedComponents": "function-declaration",
+  //       "unnamedComponents": "arrow-function"
+  //     }
+  //   ],
+  //   "@typescript-eslint/no-non-null-assertion": "off"
+  // }
+  "rules": {}
 }

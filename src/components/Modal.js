@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+"use client"
+import React, { useState, useContext } from "react";
 import dictionary from "./../data/dictionary";
 import { useRouter } from "next/navigation";
-
+import SocketContext from "@/app/socket/SocketProvider";
+import { useSearchParams } from "next/navigation";
 export default function Modal({
+    isMulti,
     isCorrect,
+    isOpponentEnd,
     solution,
     turn,
     costTime,
@@ -11,10 +15,14 @@ export default function Modal({
     endTime,
     resetGame,
     closeModal,
+    setIsPlayAgain,
 }) {
     const [showDefn, setShowDefn] = useState(false);
+    const [isWaiting, setIsWaiting] = useState(false);
     const router = useRouter();
-
+    const socket = useContext(SocketContext);
+    const searchParams = useSearchParams();
+    const roomCode = searchParams.get("roomCode");
     let letters = solution.split("");
     const solutionBlock = (
         <div className="row current">
@@ -28,22 +36,50 @@ export default function Modal({
 
     const newGame = () => {
         resetGame();
-        closeModal();
+        if (isMulti) {
+            socket.emit("play-again", roomCode);
+            setIsPlayAgain(true);
+            setIsWaiting(true);
+        }
+        else{
+            closeModal();
+            router.push("/newSgame");
+            router.push("/newSgame")
+        }
+        
     };
 
     return (
         <div className="modal">
             <div>
-                {isCorrect && (
+                {isCorrect && !isOpponentEnd && (
                     <>
                         <h1>You Win!</h1>
-                        <p>You found the solution in {turn} guesses :)</p>
+                        <p>You found the solution in {turn} guesses :</p>
                     </>
                 )}
-                {!isCorrect && (
+                {isCorrect && isOpponentEnd && (
                     <>
-                        <h1>Nevermind</h1>
-                        <p>Better luck next time :)</p>
+                        <h1>You Lose!</h1>
+                        <p>Your opponent found the solution in {turn} guesses :</p>
+                    </>
+                )}
+                {!isMulti && !isCorrect && (
+                    <>
+                        <h1>NeverMind</h1>
+                        <p>Better luck next time :</p>
+                    </>
+                )}
+                {isMulti && !isCorrect && !isOpponentEnd && (
+                    <>
+                        <h1>You Lose!</h1>
+                        <p>You have used up your turns!</p>
+                    </>
+                )}
+                {isMulti && !isCorrect && isOpponentEnd && (
+                    <>
+                        <h1>You Win!</h1>
+                        <p>Your opponent has used up their turns!</p>
                     </>
                 )}
                 <p className="time">Your time: {costTime}</p>
@@ -52,7 +88,7 @@ export default function Modal({
                 <p className="solution">THE SOLUTION IS: </p>
                 {solutionBlock}
                 <button className="reset" onClick={newGame}>
-                    Play Again
+                    {isWaiting ? "Wait for opponent" : " Play Again"}
                 </button>
                 <button
                     className="anchor"
@@ -60,16 +96,15 @@ export default function Modal({
                 >
                     What does it mean?
                 </button>
-                <div className={`meaning ${showDefn ? "show" : ""}`}>
-                    <p className="definition">{dictionary[solution]}</p>
-                </div>
-                <br />
                 <button
                     className="home"
                     onClick={() => router.push("/")}
                 >
                     Home
                 </button>
+                <div className={`meaning ${showDefn ? "show" : ""}`}>
+                    <p className="definition">{dictionary[solution]}</p>
+                </div>
             </div>
         </div>
     );
