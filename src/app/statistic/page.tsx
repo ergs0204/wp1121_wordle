@@ -1,35 +1,29 @@
 "use client"
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Gamestat from "@/components/Gamestat";
-import { useState } from "react";
+import { UserInfo } from "@/lib/types/type";
 
-export default function Statistic (){
+export default function Statistic() {
     const router = useRouter();
-    // const [user, setUser] = useState<String>('');
-    // const [score, setScore] = useState<String>('');
-    const [gameInfos, setGameInfos] = useState<String[]>([]);
+    const [score, setScore] = useState<String[]>([]);
 
-    // TODO: get personal statistic from api
-    fetch('/api/getScoreboard')
+    useEffect(() => {
+        fetch('/api/getScoreboard')
             .then(response => response.json())
             .then((data) => {
-                // const userId = data.userId
-                // const score = data.score
-                const gameInfos = data.games
-                // setUser(userId)
-                // setScore(score)
-                setGameInfos(gameInfos)
+                const newScores = data.map((user: UserInfo) => user.score);
+                setScore(newScores);
             })
             .catch(error => console.error(error));
-
+    }, []);
     return (
         <div className="statistic">
             <button className="back" onClick={() => router.push("/")}>Home</button>
             <h1>Wordle Statistic</h1>
             <div>
-                <Gamestat gameInfos={gameInfos} score={score}/>
+                <Gamestat score={score}/>
             </div>
         </div>
     );
-};
+}
