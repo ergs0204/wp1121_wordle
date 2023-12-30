@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import dictionary from "../data/dictionary";
 
-export default function Setproblem() {
+export default function Setproblem({provideProblem}) {
     const [solution, setSolution] = useState();
     const [errorMsg, setErrorMsg] = useState("");
     const errorRef = useRef();
